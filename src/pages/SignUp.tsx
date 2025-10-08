@@ -167,7 +167,7 @@ const SignUp = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary mb-6 animate-pulse shadow-2xl">
             <Shield className="w-10 h-10 text-secondary-foreground animate-bounce" />
           </div>
-          <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-white via-blue-100 to-green-100 bg-clip-text text-transparent">Online Bank</h1>
+          <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-white via-blue-100 to-green-100 bg-clip-text text-transparent">Finovia Bank</h1>
           <p className="text-white/80 text-lg">Create your secure banking account</p>
         </div>
 
@@ -175,7 +175,7 @@ const SignUp = () => {
           <CardHeader>
             <CardTitle>Create Account</CardTitle>
             <CardDescription>
-              Start your secure banking journey with Online Bank
+              Start your secure banking journey with Finovia Bank
             </CardDescription>
           </CardHeader>
           <CardContent>

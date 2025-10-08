@@ -176,7 +176,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
       <Card className="animate-fade-in-up">
       <CardHeader>
         <CardTitle>Transfer Money</CardTitle>
-        <CardDescription>Send money to another Online Bank account</CardDescription>
+        <CardDescription>Send money to another Finovia Bank account</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleTransfer} className="space-y-6">

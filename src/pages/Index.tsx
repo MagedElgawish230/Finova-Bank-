@@ -30,7 +30,7 @@ const Index = () => {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-12 animate-fade-in-up animation-delay-200 max-w-3xl mx-auto leading-relaxed">
-              Experience the future of online banking with Online Bank. Fast transfers, real-time tracking, and enterprise-grade security that puts you in control.
+              Experience the future of online banking with Finovia Bank. Fast transfers, real-time tracking, and enterprise-grade security that puts you in control.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-fade-in-up animation-delay-400">
               <Link to="/signup">
@@ -76,7 +76,7 @@ const Index = () => {
           <div className="text-center mb-20">
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-6 animate-fade-in-up">
               <Zap className="w-4 h-4" />
-              Why Choose Online Bank?
+              Why Choose Finovia Bank?
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent animate-fade-in-up animation-delay-200">
               Banking That Works for You
@@ -109,7 +109,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors duration-300">Instant Transfers</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  Send money instantly to any Online Bank account with real-time confirmation and zero fees.
+                  Send money instantly to any Finovia Bank account with real-time confirmation and zero fees.
                 </p>
                 <div className="mt-4 flex items-center text-sm text-secondary font-semibold group-hover:translate-x-2 transition-transform duration-300">
                   Learn more →
@@ -191,13 +191,13 @@ const Index = () => {
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-semibold mb-6 animate-fade-in-up">
                 <Shield className="w-4 h-4" />
-                About Online Bank
+                About Finovia Bank
               </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent animate-fade-in-up animation-delay-200">
                 Your Trusted Financial Partner
               </h2>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
-                Founded on the principles of security, innovation, and customer-first service, Online Bank has been revolutionizing digital banking since 2020.
+                Founded on the principles of security, innovation, and customer-first service, Finovia Bank has been revolutionizing digital banking since 2020.
               </p>
             </div>
 
@@ -207,7 +207,7 @@ const Index = () => {
                 <h3 className="text-3xl font-bold mb-6 text-foreground">Our Story</h3>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    Online Bank was born from a simple vision: to make banking accessible, secure, and effortless for everyone. 
+                    Finovia Bank was born from a simple vision: to make banking accessible, secure, and effortless for everyone. 
                     We believe that managing your finances shouldn't be complicated or stressful.
                   </p>
                   <p>
@@ -282,7 +282,7 @@ const Index = () => {
                   that empower individuals and businesses to achieve their financial goals with confidence and ease."
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-2 text-primary font-semibold">
-                  <span>— Online Bank Leadership Team</span>
+                  <span>— Finovia Bank Leadership Team</span>
                 </div>
               </div>
             </div>
@@ -311,7 +311,7 @@ const Index = () => {
               </span>
             </h2>
             <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
-              Join thousands of satisfied customers who trust Online Bank for their financial needs. Start your journey today with $1000 free!
+              Join thousands of satisfied customers who trust Finovia Bank for their financial needs. Start your journey today with $1000 free!
             </p>
             <div className="flex justify-center animate-fade-in-up animation-delay-600">
               <Link to="/signup">
@@ -353,7 +353,7 @@ const Index = () => {
       <footer className="bg-card py-12 border-t">
         <div className="container mx-auto px-4">
           <div className="text-center text-muted-foreground">
-            <p>&copy; 2025 Online Bank. All rights reserved.</p>
+            <p>&copy; 2025 Finovia Bank. All rights reserved.</p>
             <p className="text-sm mt-2">Banking services powered by Lovable Cloud</p>
           </div>
         </div>
