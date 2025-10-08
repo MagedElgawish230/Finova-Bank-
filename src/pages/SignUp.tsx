@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Shield, Lock, Mail, ArrowRight, Home } from "lucide-react";
+import { Shield, User, Mail, Lock, ArrowLeft } from "lucide-react";
 
-const Auth = () => {
+const SignUp = () => {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,15 @@ const Auth = () => {
   const { toast } = useToast();
 
   const validateForm = () => {
+    if (!fullName.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter your full name.",
+      });
+      return false;
+    }
+
     if (!email || !password) {
       toast({
         variant: "destructive",
@@ -47,7 +57,7 @@ const Auth = () => {
     return true;
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -55,29 +65,84 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName.trim(),
+          },
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+        },
       });
+
       if (error) throw error;
+
+      // Get the created user from the signup response
+      const { data: { user: createdUser } } = await supabase.auth.getUser();
+      
+      if (createdUser) {
+        // Create profile immediately after successful signup
+        try {
+          const generateAccountNumber = () => {
+            return Math.floor(Math.random() * 9000000000) + 1000000000; // 10-digit number
+          };
+
+          let accountNumber = generateAccountNumber().toString();
+          let attempts = 0;
+          const maxAttempts = 5;
+
+          // Try to find a unique account number
+          while (attempts < maxAttempts) {
+            const { data: existingProfile } = await supabase
+              .from("profiles")
+              .select("account_number")
+              .eq("account_number", accountNumber)
+              .single();
+
+            if (!existingProfile) {
+              break; // Account number is unique
+            }
+            
+            accountNumber = generateAccountNumber().toString();
+            attempts++;
+          }
+
+          // Create profile
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert({
+              id: createdUser.id,
+              full_name: fullName.trim(),
+              email: email,
+              account_number: accountNumber,
+            });
+
+          if (profileError) {
+            console.error("Profile creation error:", profileError);
+            // Don't show error to user, profile might be created by trigger
+          }
+        } catch (profileError) {
+          console.error("Profile creation error:", profileError);
+          // Don't show error to user, profile might be created by trigger
+        }
+      }
+
       toast({
-        title: "Welcome back!",
-        description: "Successfully logged in.",
+        title: "Account Created!",
+        description: "Please check your email and click the confirmation link to activate your account.",
       });
-      navigate("/dashboard");
+      navigate("/auth");
     } catch (error: any) {
       let errorMessage = error.message || "An unexpected error occurred. Please try again.";
-      
-      // Handle specific Supabase errors
-      if (error.message?.includes("Email not confirmed")) {
-        errorMessage = "Please check your email and click the confirmation link before signing in.";
-      } else if (error.message?.includes("Invalid login credentials")) {
-        errorMessage = "Invalid email or password. Please check your credentials.";
+
+      if (error.message?.includes("User already registered")) {
+        errorMessage = "An account with this email already exists. Please sign in instead.";
       }
-      
+
       toast({
         variant: "destructive",
-        title: "Error",
+        title: "Sign Up Failed",
         description: errorMessage,
       });
     } finally {
@@ -94,18 +159,34 @@ const Auth = () => {
             <Shield className="w-8 h-8 text-secondary-foreground" />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">Online Bank</h1>
-          <p className="text-white/80">Your trusted online banking partner</p>
+          <p className="text-white/80">Create your secure banking account</p>
         </div>
 
         <Card className="shadow-elevated animate-fade-in-up animation-delay-200">
           <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
+            <CardTitle>Create Account</CardTitle>
             <CardDescription>
-              Sign in to your Online Bank account
+              Start your secure banking journey with Online Bank
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSignIn} className="space-y-4">
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name</Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="John Doe"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
@@ -139,35 +220,23 @@ const Auth = () => {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Signing In..." : (
-                  <>
-                    Sign In <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
+                {loading ? "Creating Account..." : "Create Account"}
               </Button>
 
-              <div className="text-center text-sm">
+              <div className="text-center text-sm space-y-2">
                 <button
                   type="button"
-                  onClick={() => navigate("/signup")}
-                  className="text-primary hover:underline"
+                  onClick={() => navigate("/auth")}
+                  className="text-primary hover:underline flex items-center justify-center gap-2"
                 >
-                  Don't have an account? Sign up
+                  <ArrowLeft className="w-4 h-4" />
+                  Already have an account? Sign in
                 </button>
+                <p className="text-xs text-muted-foreground">
+                  After signing up, check your email for a confirmation link.
+                </p>
               </div>
             </form>
-
-            <div className="pt-4 border-t mt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
-                className="w-full" 
-                onClick={() => navigate("/")}
-              >
-                <Home className="w-4 h-4 mr-2" />
-                Return to Homepage
-              </Button>
-            </div>
           </CardContent>
         </Card>
       </div>
@@ -175,4 +244,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default SignUp;

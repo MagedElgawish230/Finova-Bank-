@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Send } from "lucide-react";
+import { Send, Home } from "lucide-react";
 
 interface ContactFormProps {
   userId: string;
@@ -19,18 +20,81 @@ const ContactForm = ({ userId }: ContactFormProps) => {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const validateForm = () => {
+    if (!name.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter your name.",
+      });
+      return false;
+    }
+
+    if (!email.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter your email address.",
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter a valid email address.",
+      });
+      return false;
+    }
+
+    if (!subject.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter a subject.",
+      });
+      return false;
+    }
+
+    if (!message.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please enter your message.",
+      });
+      return false;
+    }
+
+    if (message.trim().length < 10) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Message must be at least 10 characters long.",
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
     setLoading(true);
 
     try {
       const { error } = await supabase.from("contact_messages").insert({
         user_id: userId,
-        name,
-        email,
-        subject,
-        message,
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
       });
 
       if (error) throw error;
@@ -48,7 +112,7 @@ const ContactForm = ({ userId }: ContactFormProps) => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to send message. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -56,7 +120,7 @@ const ContactForm = ({ userId }: ContactFormProps) => {
   };
 
   return (
-    <Card>
+    <Card className="animate-fade-in-up">
       <CardHeader>
         <CardTitle>Contact Support</CardTitle>
         <CardDescription>Have questions? We're here to help!</CardDescription>
@@ -121,6 +185,18 @@ const ContactForm = ({ userId }: ContactFormProps) => {
             )}
           </Button>
         </form>
+
+        <div className="pt-4 border-t mt-4">
+          <Button 
+            type="button" 
+            variant="outline" 
+            className="w-full" 
+            onClick={() => navigate("/")}
+          >
+            <Home className="w-4 h-4 mr-2" />
+            Return to Homepage
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

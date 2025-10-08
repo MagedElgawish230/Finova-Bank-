@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ArrowDownLeft, ArrowUpRight, RefreshCw } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -29,17 +30,26 @@ const TransactionHistory = ({ userId }: TransactionHistoryProps) => {
   }, [userId]);
 
   const fetchTransactions = async () => {
-    const { data, error } = await supabase
-      .from("transactions")
-      .select("*")
-      .or(`from_user_id.eq.${userId},to_user_id.eq.${userId}`)
-      .order("created_at", { ascending: false })
-      .limit(20);
+    try {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select("*")
+        .or(`from_user_id.eq.${userId},to_user_id.eq.${userId}`)
+        .order("created_at", { ascending: false })
+        .limit(20);
 
-    if (!error && data) {
-      setTransactions(data);
+      if (error) {
+        console.error("Transaction fetch error:", error);
+        setTransactions([]);
+      } else {
+        setTransactions(data || []);
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      setTransactions([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const formatCurrency = (amount: number) => {
@@ -62,18 +72,48 @@ const TransactionHistory = ({ userId }: TransactionHistoryProps) => {
   if (loading) {
     return (
       <Card>
-        <CardContent className="py-8">
-          <div className="text-center text-muted-foreground">Loading transactions...</div>
+        <CardHeader>
+          <CardTitle>Transaction History</CardTitle>
+          <CardDescription>Your recent banking activity</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex items-start gap-4 p-4 rounded-lg border bg-card animate-pulse">
+                <div className="w-10 h-10 rounded-full bg-muted"></div>
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 bg-muted rounded w-3/4"></div>
+                  <div className="h-3 bg-muted rounded w-1/2"></div>
+                  <div className="h-3 bg-muted rounded w-1/4"></div>
+                </div>
+                <div className="w-20 h-4 bg-muted rounded"></div>
+              </div>
+            ))}
+          </div>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card>
+    <Card className="animate-fade-in-up">
       <CardHeader>
-        <CardTitle>Transaction History</CardTitle>
-        <CardDescription>Your recent banking activity</CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Transaction History</CardTitle>
+            <CardDescription>Your recent banking activity</CardDescription>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchTransactions}
+            disabled={loading}
+            className="transition-all duration-300 hover:scale-105"
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {transactions.length === 0 ? (

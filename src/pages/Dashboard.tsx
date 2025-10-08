@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { User, Session } from "@supabase/supabase-js";
@@ -48,31 +48,95 @@ const Dashboard = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const fetchProfile = useCallback(async () => {
+    if (!user) return;
+
+    try {
+      // First, try to get existing profile
+      const { data: existingProfile, error: fetchError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single();
+
+      if (existingProfile) {
+        setProfile(existingProfile);
+        return;
+      }
+
+      // If no profile exists, create one
+      console.log("No profile found, creating new profile...");
+      
+      // Generate a simple account number
+      const accountNumber = Date.now().toString().slice(-10); // Use timestamp for uniqueness
+      
+      const { data: newProfile, error: createError } = await supabase
+        .from("profiles")
+        .insert({
+          id: user.id,
+          full_name: user.user_metadata?.full_name || 'User',
+          email: user.email || '',
+          account_number: accountNumber,
+          balance: 1000.00, // Give new users $1000 starting balance
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error("Profile creation error:", createError);
+        
+        // If profile already exists (race condition), try to fetch it
+        if (createError.code === '23505') {
+          console.log("Profile already exists, fetching...");
+          const { data: existingData, error: refetchError } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
+
+          if (refetchError) {
+            console.error("Error re-fetching profile:", refetchError);
+            toast({
+              variant: "destructive",
+              title: "Error",
+              description: `Failed to load profile: ${refetchError.message}`,
+            });
+          } else {
+            setProfile(existingData);
+            toast({
+              title: "Welcome!",
+              description: "Your account is ready.",
+            });
+          }
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: `Failed to create profile: ${createError.message}`,
+          });
+        }
+      } else {
+        setProfile(newProfile);
+        toast({
+          title: "Welcome!",
+          description: "Your account has been created with $1000 starting balance.",
+        });
+      }
+    } catch (error) {
+      console.error("Unexpected error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+      });
+    }
+  }, [user, toast]);
+
   useEffect(() => {
     if (user) {
       fetchProfile();
     }
-  }, [user]);
-
-  const fetchProfile = async () => {
-    if (!user) return;
-
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    if (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to load profile",
-      });
-    } else {
-      setProfile(data);
-    }
-  };
+  }, [user, fetchProfile]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -88,10 +152,13 @@ const Dashboard = () => {
 
   if (!profile) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your account...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div>
+            <h2 className="text-lg font-semibold">Loading your account...</h2>
+            <p className="text-muted-foreground">Please wait while we fetch your information</p>
+          </div>
         </div>
       </div>
     );
@@ -100,18 +167,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm">
+      <header className="border-b bg-card shadow-sm animate-fade-in-up">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center animate-pulse">
               <Wallet className="w-5 h-5 text-secondary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Online Bank</h1>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Online Bank</h1>
               <p className="text-sm text-muted-foreground">Welcome, {profile.full_name}</p>
             </div>
           </div>
-          <Button variant="outline" onClick={handleLogout}>
+          <Button variant="outline" onClick={handleLogout} className="transition-all duration-300 hover:scale-105">
             <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
@@ -120,11 +187,11 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         {/* Balance Card */}
-        <div className="mb-8">
-          <Card className="shadow-elevated" style={{ background: "var(--gradient-primary)" }}>
+        <div className="mb-8 animate-fade-in-up animation-delay-200">
+          <Card className="shadow-elevated transition-all duration-300 hover:scale-105" style={{ background: "var(--gradient-primary)" }}>
             <CardHeader>
               <CardDescription className="text-white/80">Available Balance</CardDescription>
-              <CardTitle className="text-4xl font-bold text-white">
+              <CardTitle className="text-4xl font-bold text-white animate-bounce-in">
                 {formatCurrency(profile.balance)}
               </CardTitle>
             </CardHeader>
@@ -137,11 +204,11 @@ const Dashboard = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 animate-fade-in-up animation-delay-400">
           <Button
             variant={activeTab === "overview" ? "default" : "outline"}
             onClick={() => setActiveTab("overview")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
           >
             <Wallet className="w-4 h-4" />
             Overview
@@ -149,7 +216,7 @@ const Dashboard = () => {
           <Button
             variant={activeTab === "transfer" ? "default" : "outline"}
             onClick={() => setActiveTab("transfer")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
           >
             <ArrowUpRight className="w-4 h-4" />
             Transfer
@@ -157,7 +224,7 @@ const Dashboard = () => {
           <Button
             variant={activeTab === "history" ? "default" : "outline"}
             onClick={() => setActiveTab("history")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
           >
             <History className="w-4 h-4" />
             History
@@ -165,7 +232,7 @@ const Dashboard = () => {
           <Button
             variant={activeTab === "contact" ? "default" : "outline"}
             onClick={() => setActiveTab("contact")}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
           >
             <MessageSquare className="w-4 h-4" />
             Contact
