@@ -87,95 +87,265 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300">
-                  <Lock className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-200 border-2 hover:border-primary/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 shadow-lg">
+                  <Lock className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">Bank-Level Security</h3>
-                <p className="text-muted-foreground">
-                  Multi-factor authentication and end-to-end encryption keep your money safe 24/7.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">Bank-Level Security</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Multi-factor authentication and end-to-end encryption keep your money safe 24/7 with military-grade protection.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors duration-300">
-                  <Zap className="w-6 h-6 text-secondary group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-400 border-2 hover:border-secondary/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center mb-6 group-hover:from-secondary/30 group-hover:to-secondary/20 transition-all duration-300 shadow-lg">
+                  <Zap className="w-8 h-8 text-secondary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-secondary transition-colors duration-300">Instant Transfers</h3>
-                <p className="text-muted-foreground">
-                  Send money instantly to any Online Bank account with real-time confirmation.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors duration-300">Instant Transfers</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Send money instantly to any Online Bank account with real-time confirmation and zero fees.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-secondary font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors duration-300">
-                  <BarChart3 className="w-6 h-6 text-accent group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-600 border-2 hover:border-accent/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-6 group-hover:from-accent/30 group-hover:to-accent/20 transition-all duration-300 shadow-lg">
+                  <BarChart3 className="w-8 h-8 text-accent group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors duration-300">Transaction History</h3>
-                <p className="text-muted-foreground">
-                  Track every transaction with detailed history and smart categorization.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors duration-300">Smart Analytics</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Track every transaction with detailed history, smart categorization, and spending insights.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors duration-300">
-                  <CreditCard className="w-6 h-6 text-primary group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-800 border-2 hover:border-primary/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 shadow-lg">
+                  <CreditCard className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">Easy Account Management</h3>
-                <p className="text-muted-foreground">
-                  Manage your account effortlessly with our intuitive dashboard interface.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">Easy Management</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Manage your account effortlessly with our intuitive dashboard and mobile-first design.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-primary font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors duration-300">
-                  <Globe className="w-6 h-6 text-secondary group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-1000 border-2 hover:border-secondary/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center mb-6 group-hover:from-secondary/30 group-hover:to-secondary/20 transition-all duration-300 shadow-lg">
+                  <Globe className="w-8 h-8 text-secondary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-secondary transition-colors duration-300">24/7 Support</h3>
-                <p className="text-muted-foreground">
-                  Our dedicated support team is always ready to help you with any questions.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors duration-300">24/7 Support</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Our dedicated support team is always ready to help you with any questions or concerns.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-secondary font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group">
-              <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-4 group-hover:bg-accent/20 transition-colors duration-300">
-                  <Shield className="w-6 h-6 text-accent group-hover:scale-110 transition-transform duration-300" />
+            <Card className="shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 group animate-fade-in-up animation-delay-1200 border-2 hover:border-accent/20">
+              <CardContent className="pt-8 pb-8">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-6 group-hover:from-accent/30 group-hover:to-accent/20 transition-all duration-300 shadow-lg">
+                  <Shield className="w-8 h-8 text-accent group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-xl font-bold mb-2 group-hover:text-accent transition-colors duration-300">FDIC Insured</h3>
-                <p className="text-muted-foreground">
-                  Your deposits are protected up to $250,000 by FDIC insurance.
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors duration-300">FDIC Insured</h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  Your deposits are protected up to $250,000 by FDIC insurance for complete peace of mind.
                 </p>
+                <div className="mt-4 flex items-center text-sm text-accent font-semibold group-hover:translate-x-2 transition-transform duration-300">
+                  Learn more →
+                </div>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
 
+      {/* About Us Section */}
+      <section className="py-24 bg-gradient-to-b from-muted/20 to-background relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(34,197,94,0.05),transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-2 rounded-full text-sm font-semibold mb-6 animate-fade-in-up">
+                <Shield className="w-4 h-4" />
+                About Online Bank
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent animate-fade-in-up animation-delay-200">
+                Your Trusted Financial Partner
+              </h2>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
+                Founded on the principles of security, innovation, and customer-first service, Online Bank has been revolutionizing digital banking since 2020.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              {/* Left Column - Story */}
+              <div className="animate-fade-in-up animation-delay-600">
+                <h3 className="text-3xl font-bold mb-6 text-foreground">Our Story</h3>
+                <div className="space-y-4 text-muted-foreground leading-relaxed">
+                  <p>
+                    Online Bank was born from a simple vision: to make banking accessible, secure, and effortless for everyone. 
+                    We believe that managing your finances shouldn't be complicated or stressful.
+                  </p>
+                  <p>
+                    Our team of financial experts, security specialists, and technology innovators work tirelessly to 
+                    create a banking experience that puts you in control of your financial future.
+                  </p>
+                  <p>
+                    Today, we're proud to serve over 50,000 customers worldwide, processing millions of secure 
+                    transactions every month with zero security incidents.
+                  </p>
+                </div>
+                
+                <div className="mt-8 grid grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary mb-2">50K+</div>
+                    <div className="text-sm text-muted-foreground">Happy Customers</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-secondary mb-2">$2B+</div>
+                    <div className="text-sm text-muted-foreground">Assets Protected</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-accent mb-2">99.9%</div>
+                    <div className="text-sm text-muted-foreground">Uptime</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column - Values */}
+              <div className="animate-fade-in-up animation-delay-800">
+                <h3 className="text-3xl font-bold mb-8 text-foreground">Our Values</h3>
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4 p-4 rounded-lg bg-card border-2 hover:border-primary/20 transition-all duration-300 hover:scale-105">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">Security First</h4>
+                      <p className="text-muted-foreground">Your financial data is protected with bank-level encryption and multi-factor authentication.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-4 rounded-lg bg-card border-2 hover:border-secondary/20 transition-all duration-300 hover:scale-105">
+                    <div className="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center flex-shrink-0">
+                      <Zap className="w-6 h-6 text-secondary" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">Innovation</h4>
+                      <p className="text-muted-foreground">We continuously improve our platform with cutting-edge technology and user feedback.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 p-4 rounded-lg bg-card border-2 hover:border-accent/20 transition-all duration-300 hover:scale-105">
+                    <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                      <Globe className="w-6 h-6 text-accent" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-lg mb-2">Accessibility</h4>
+                      <p className="text-muted-foreground">Banking should be available to everyone, everywhere, at any time.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mission Statement */}
+            <div className="mt-20 text-center animate-fade-in-up animation-delay-1000">
+              <div className="max-w-4xl mx-auto bg-gradient-to-r from-primary/5 to-secondary/5 p-8 rounded-2xl border border-primary/10">
+                <h3 className="text-2xl font-bold mb-4 text-foreground">Our Mission</h3>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  "To democratize financial services by providing secure, accessible, and innovative banking solutions 
+                  that empower individuals and businesses to achieve their financial goals with confidence and ease."
+                </p>
+                <div className="mt-6 flex items-center justify-center gap-2 text-primary font-semibold">
+                  <span>— Online Bank Leadership Team</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-20" style={{ background: "var(--gradient-success)" }}>
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to start your secure banking journey?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who trust Online Bank for their financial needs.
-          </p>
-          <Link to="/auth">
-            <Button size="lg" className="bg-white text-secondary hover:bg-white/90">
-              Open Your Account Today
-            </Button>
-          </Link>
+      <section className="py-24 relative overflow-hidden" style={{ background: "var(--gradient-success)" }}>
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-blue-600/20"></div>
+        <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full animate-bounce animation-delay-200"></div>
+        <div className="absolute bottom-10 right-10 w-24 h-24 bg-white/10 rounded-full animate-bounce animation-delay-400"></div>
+        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white/10 rounded-full animate-bounce animation-delay-600"></div>
+        
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="max-w-4xl mx-auto">
+            <div className="inline-flex items-center gap-2 bg-white/20 text-white px-6 py-3 rounded-full text-sm font-semibold mb-8 animate-fade-in-up">
+              <Shield className="w-4 h-4" />
+              Join 50,000+ Happy Customers
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 animate-fade-in-up animation-delay-200 leading-tight">
+              Ready to start your<br />
+              <span className="text-transparent bg-gradient-to-r from-yellow-200 to-white bg-clip-text">
+                secure banking journey?
+              </span>
+            </h2>
+            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
+              Join thousands of satisfied customers who trust Online Bank for their financial needs. Start your journey today with $1000 free!
+            </p>
+            <div className="flex justify-center animate-fade-in-up animation-delay-600">
+              <Link to="/signup">
+                <Button size="lg" className="bg-white text-secondary hover:bg-white/90 transition-all duration-300 hover:scale-110 hover:shadow-2xl text-lg px-8 py-4 shadow-lg">
+                  🎉 Open Your Account Today
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Social Proof */}
+            <div className="mt-16 animate-fade-in-up animation-delay-800">
+              <p className="text-white/70 mb-6 text-sm uppercase tracking-wider font-semibold">Trusted by leading companies</p>
+              <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <Shield className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-white/80 font-medium">Enterprise Security</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-white/80 font-medium">Lightning Fast</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                    <Globe className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-white/80 font-medium">Global Access</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

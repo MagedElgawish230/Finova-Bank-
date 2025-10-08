@@ -188,16 +188,28 @@ const Dashboard = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Balance Card */}
         <div className="mb-8 animate-fade-in-up animation-delay-200">
-          <Card className="shadow-elevated transition-all duration-300 hover:scale-105" style={{ background: "var(--gradient-primary)" }}>
-            <CardHeader>
-              <CardDescription className="text-white/80">Available Balance</CardDescription>
+          <Card className="shadow-elevated transition-all duration-300 hover:scale-105 relative overflow-hidden" style={{ background: "var(--gradient-primary)" }}>
+            {/* Animated Background Elements */}
+            <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full animate-bounce animation-delay-400"></div>
+            <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/10 rounded-full animate-bounce animation-delay-600"></div>
+            
+            <CardHeader className="relative z-10">
+              <CardDescription className="text-white/80 flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                Available Balance
+              </CardDescription>
               <CardTitle className="text-4xl font-bold text-white animate-bounce-in">
                 {formatCurrency(profile.balance)}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="relative z-10">
               <div className="flex items-center gap-2 text-white/90">
                 <p className="text-sm">Account: {profile.account_number}</p>
+                <div className="ml-auto">
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                    <Wallet className="w-4 h-4 text-white" />
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

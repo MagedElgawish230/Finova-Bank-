@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowRight, Shield } from "lucide-react";
+import { ArrowRight, Shield, ArrowUpRight } from "lucide-react";
 
 interface TransferFormProps {
   profile: {
@@ -172,41 +172,57 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
   };
 
   return (
-    <Card className="animate-fade-in-up">
+    <>
+      <Card className="animate-fade-in-up">
       <CardHeader>
         <CardTitle>Transfer Money</CardTitle>
         <CardDescription>Send money to another Online Bank account</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleTransfer} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="toAccount">Recipient Account Number</Label>
-            <Input
-              id="toAccount"
-              type="text"
-              placeholder="Enter 10-digit account number"
-              value={toAccount}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                setToAccount(value);
-              }}
-              maxLength={10}
-              required
-            />
+        <form onSubmit={handleTransfer} className="space-y-6">
+          <div className="space-y-2 animate-fade-in-up animation-delay-200">
+            <Label htmlFor="toAccount" className="text-sm font-semibold flex items-center gap-2">
+              <ArrowUpRight className="w-4 h-4 text-primary" />
+              Recipient Account Number
+            </Label>
+            <div className="relative group">
+              <Input
+                id="toAccount"
+                type="text"
+                placeholder="Enter 10-digit account number"
+                value={toAccount}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setToAccount(value);
+                }}
+                maxLength={10}
+                className="transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
+                required
+              />
+              <div className="absolute right-3 top-3 text-xs text-muted-foreground">
+                {toAccount.length}/10
+              </div>
+            </div>
             <p className="text-xs text-muted-foreground">
               Enter the 10-digit account number of the recipient
             </p>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="amount">Amount ($)</Label>
-            <Input
-              id="amount"
-              type="number"
-              step="0.01"
-              min="0.01"
-              placeholder="0.00"
-              value={amount}
+          <div className="space-y-2 animate-fade-in-up animation-delay-400">
+            <Label htmlFor="amount" className="text-sm font-semibold flex items-center gap-2">
+              <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">$</span>
+              </div>
+              Transfer Amount
+            </Label>
+            <div className="relative group">
+              <Input
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0.01"
+                placeholder="0.00"
+                value={amount}
               onChange={(e) => {
                 const value = e.target.value;
                 if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
@@ -215,6 +231,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
               }}
               required
             />
+            </div>
             <p className="text-sm text-muted-foreground">
               Available balance: ${profile.balance.toFixed(2)}
             </p>
@@ -239,36 +256,37 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
             )}
           </Button>
         </form>
-
-        <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-primary" />
-                Confirm Transfer
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Please review your transfer details before confirming:
-                <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
-                  <div><strong>To Account:</strong> {toAccount}</div>
-                  <div><strong>Amount:</strong> ${parseFloat(amount || "0").toFixed(2)}</div>
-                  <div><strong>Description:</strong> {description || "Money transfer"}</div>
-                </div>
-                <p className="mt-4 text-sm text-muted-foreground">
-                  This action cannot be undone. Are you sure you want to proceed?
-                </p>
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmTransfer} disabled={loading}>
-                {loading ? "Processing..." : "Confirm Transfer"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
       </CardContent>
     </Card>
+
+    <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="flex items-center gap-2">
+            <Shield className="w-5 h-5 text-primary" />
+            Confirm Transfer
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Please review your transfer details before confirming:
+            <div className="mt-4 p-4 bg-muted rounded-lg space-y-2">
+              <div><strong>To Account:</strong> {toAccount}</div>
+              <div><strong>Amount:</strong> ${parseFloat(amount || "0").toFixed(2)}</div>
+              <div><strong>Description:</strong> {description || "Money transfer"}</div>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              This action cannot be undone. Are you sure you want to proceed?
+            </p>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={confirmTransfer} disabled={loading}>
+            {loading ? "Processing..." : "Confirm Transfer"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 };
 

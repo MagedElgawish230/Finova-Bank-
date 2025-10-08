@@ -87,14 +87,23 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "var(--gradient-hero)" }}>
+      {/* Enhanced Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
-      <div className="relative w-full max-w-md">
+      <div className="absolute inset-0 bg-gradient-to-tr from-green-500/10 to-blue-500/10"></div>
+      
+      {/* Floating Elements */}
+      <div className="absolute top-20 left-10 w-16 h-16 bg-white/10 rounded-full animate-bounce animation-delay-200"></div>
+      <div className="absolute top-40 right-20 w-12 h-12 bg-secondary/20 rounded-full animate-bounce animation-delay-400"></div>
+      <div className="absolute bottom-20 left-1/4 w-10 h-10 bg-accent/20 rounded-full animate-bounce animation-delay-600"></div>
+      <div className="absolute bottom-40 right-1/3 w-14 h-14 bg-primary/20 rounded-full animate-bounce animation-delay-800"></div>
+      
+      <div className="relative w-full max-w-md z-10">
         <div className="text-center mb-8 animate-fade-in-up">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-4 animate-pulse">
-            <Shield className="w-8 h-8 text-secondary-foreground" />
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary mb-6 animate-pulse shadow-2xl">
+            <Shield className="w-10 h-10 text-secondary-foreground animate-bounce" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">Online Bank</h1>
-          <p className="text-white/80">Your trusted online banking partner</p>
+          <h1 className="text-5xl font-bold text-white mb-3 bg-gradient-to-r from-white via-blue-100 to-green-100 bg-clip-text text-transparent">Online Bank</h1>
+          <p className="text-white/80 text-lg">Your trusted online banking partner</p>
         </div>
 
         <Card className="shadow-elevated animate-fade-in-up animation-delay-200">
@@ -106,33 +115,33 @@ const Auth = () => {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSignIn} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <div className="space-y-2 animate-fade-in-up animation-delay-400">
+                <Label htmlFor="email" className="text-sm font-semibold">Email</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-300" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
                     required
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <div className="space-y-2 animate-fade-in-up animation-delay-600">
+                <Label htmlFor="password" className="text-sm font-semibold">Password</Label>
+                <div className="relative group">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors duration-300" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
                     required
                   />
                 </div>

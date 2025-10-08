@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Home } from "lucide-react";
+import { Send, Home, User, Mail } from "lucide-react";
 
 interface ContactFormProps {
   userId: string;
@@ -126,30 +126,42 @@ const ContactForm = ({ userId }: ContactFormProps) => {
         <CardDescription>Have questions? We're here to help!</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-2 animate-fade-in-up animation-delay-200">
+              <Label htmlFor="name" className="text-sm font-semibold flex items-center gap-2">
+                <User className="w-4 h-4 text-primary" />
+                Full Name
+              </Label>
+              <div className="relative group">
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="Your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
+                  required
+                />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+            <div className="space-y-2 animate-fade-in-up animation-delay-400">
+              <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
+                Email Address
+              </Label>
+              <div className="relative group">
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
+                  required
+                />
+              </div>
             </div>
           </div>
 
