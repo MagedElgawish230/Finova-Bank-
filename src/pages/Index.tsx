@@ -24,7 +24,7 @@ const Index = () => {
               <Shield className="w-12 h-12 text-secondary-foreground animate-bounce" />
             </div>
             <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 bg-gradient-to-r from-white via-blue-100 to-green-100 bg-clip-text text-transparent animate-fade-in-up leading-tight">
-              Banking Made Simple,<br />
+              Finovia Banking Made Simple,<br />
               <span className="text-transparent bg-gradient-to-r from-green-300 to-blue-300 bg-clip-text">
                 Secure, and Smart
               </span>
@@ -79,7 +79,7 @@ const Index = () => {
               Why Choose Finovia Bank?
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent animate-fade-in-up animation-delay-200">
-              Banking That Works for You
+              Finovia Banking That Works for You
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
               Built for modern banking needs with cutting-edge technology that puts you in control of your financial future
@@ -92,7 +92,7 @@ const Index = () => {
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 shadow-lg">
                   <Lock className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">Bank-Level Security</h3>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">Finovia Bank-Level Security</h3>
                 <p className="text-muted-foreground leading-relaxed">
                   Multi-factor authentication and end-to-end encryption keep your money safe 24/7 with military-grade protection.
                 </p>
@@ -246,7 +246,7 @@ const Index = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Security First</h4>
-                      <p className="text-muted-foreground">Your financial data is protected with bank-level encryption and multi-factor authentication.</p>
+                      <p className="text-muted-foreground">Your financial data is protected with Finovia bank-level encryption and multi-factor authentication.</p>
                     </div>
                   </div>
 
@@ -266,7 +266,7 @@ const Index = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-lg mb-2">Accessibility</h4>
-                      <p className="text-muted-foreground">Banking should be available to everyone, everywhere, at any time.</p>
+                      <p className="text-muted-foreground">Finovia Banking should be available to everyone, everywhere, at any time.</p>
                     </div>
                   </div>
                 </div>
@@ -278,7 +278,7 @@ const Index = () => {
               <div className="max-w-4xl mx-auto bg-gradient-to-r from-primary/5 to-secondary/5 p-8 rounded-2xl border border-primary/10">
                 <h3 className="text-2xl font-bold mb-4 text-foreground">Our Mission</h3>
                 <p className="text-lg text-muted-foreground leading-relaxed">
-                  "To democratize financial services by providing secure, accessible, and innovative banking solutions 
+                  "To democratize financial services by providing secure, accessible, and innovative Finovia banking solutions 
                   that empower individuals and businesses to achieve their financial goals with confidence and ease."
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-2 text-primary font-semibold">
@@ -307,7 +307,7 @@ const Index = () => {
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 animate-fade-in-up animation-delay-200 leading-tight">
               Ready to start your<br />
               <span className="text-transparent bg-gradient-to-r from-yellow-200 to-white bg-clip-text">
-                secure banking journey?
+                secure Finovia banking journey?
               </span>
             </h2>
             <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in-up animation-delay-400">
@@ -354,7 +354,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="text-center text-muted-foreground">
             <p>&copy; 2025 Finovia Bank. All rights reserved.</p>
-            <p className="text-sm mt-2">Banking services powered by Lovable Cloud</p>
+            <p className="text-sm mt-2">Finovia Banking services powered by Lovable Cloud</p>
           </div>
         </div>
       </footer>
