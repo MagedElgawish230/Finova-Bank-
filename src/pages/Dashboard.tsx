@@ -107,7 +107,7 @@ const Dashboard = () => {
               <Wallet className="w-5 h-5 text-secondary-foreground" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">SecureBank</h1>
+              <h1 className="text-xl font-bold">Online Bank</h1>
               <p className="text-sm text-muted-foreground">Welcome, {profile.full_name}</p>
             </div>
           </div>

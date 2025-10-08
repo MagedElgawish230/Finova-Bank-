@@ -17,7 +17,7 @@ const Index = () => {
               Banking Made Simple, Secure, and Smart
             </h1>
             <p className="text-xl text-white/90 mb-8">
-              Experience the future of online banking with SecureBank. Fast transfers, real-time tracking, and enterprise-grade security.
+              Experience the future of online banking with Online Bank. Fast transfers, real-time tracking, and enterprise-grade security.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/auth">
@@ -39,7 +39,7 @@ const Index = () => {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose SecureBank?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose Online Bank?</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Built for modern banking needs with cutting-edge technology
             </p>
@@ -65,7 +65,7 @@ const Index = () => {
                 </div>
                 <h3 className="text-xl font-bold mb-2">Instant Transfers</h3>
                 <p className="text-muted-foreground">
-                  Send money instantly to any SecureBank account with real-time confirmation.
+                  Send money instantly to any Online Bank account with real-time confirmation.
                 </p>
               </CardContent>
             </Card>
@@ -128,7 +128,7 @@ const Index = () => {
             Ready to start your secure banking journey?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who trust SecureBank for their financial needs.
+            Join thousands of satisfied customers who trust Online Bank for their financial needs.
           </p>
           <Link to="/auth">
             <Button size="lg" className="bg-white text-secondary hover:bg-white/90">
@@ -142,7 +142,7 @@ const Index = () => {
       <footer className="bg-card py-12 border-t">
         <div className="container mx-auto px-4">
           <div className="text-center text-muted-foreground">
-            <p>&copy; 2025 SecureBank. All rights reserved.</p>
+            <p>&copy; 2025 Online Bank. All rights reserved.</p>
             <p className="text-sm mt-2">Banking services powered by Lovable Cloud</p>
           </div>
         </div>

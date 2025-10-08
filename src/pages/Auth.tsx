@@ -47,7 +47,7 @@ const Auth = () => {
         if (error) throw error;
         toast({
           title: "Account created!",
-          description: "Welcome to SecureBank. Redirecting to dashboard...",
+          description: "Welcome to Online Bank. Redirecting to dashboard...",
         });
         navigate("/dashboard");
       }
@@ -69,7 +69,7 @@ const Auth = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-secondary mb-4">
             <Shield className="w-8 h-8 text-secondary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold text-white mb-2">SecureBank</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Online Bank</h1>
           <p className="text-white/80">Your trusted online banking partner</p>
         </div>
 

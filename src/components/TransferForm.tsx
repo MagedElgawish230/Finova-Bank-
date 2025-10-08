@@ -117,7 +117,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     <Card>
       <CardHeader>
         <CardTitle>Transfer Money</CardTitle>
-        <CardDescription>Send money to another SecureBank account</CardDescription>
+        <CardDescription>Send money to another Online Bank account</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleTransfer} className="space-y-4">
