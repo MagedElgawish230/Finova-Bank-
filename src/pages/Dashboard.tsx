@@ -167,19 +167,19 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm animate-fade-in-up">
+      <header className="border-b bg-card shadow-sm animate-3d-slide-up perspective-container">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center animate-pulse">
-              <Wallet className="w-5 h-5 text-secondary-foreground" />
+            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center animate-3d-pulse hover-3d-rotate">
+              <Wallet className="w-5 h-5 text-secondary-foreground animate-3d-float" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Finovia Bank</h1>
-              <p className="text-sm text-muted-foreground">Welcome, {profile.full_name}</p>
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent text-3d-glow">Finovia Bank</h1>
+              <p className="text-sm text-muted-foreground animate-3d-slide-in-left animation-delay-3d-200">Welcome, {profile.full_name}</p>
             </div>
           </div>
-          <Button variant="outline" onClick={handleLogout} className="transition-all duration-300 hover:scale-105">
-            <LogOut className="w-4 h-4 mr-2" />
+          <Button variant="outline" onClick={handleLogout} className="btn-3d hover-3d-lift">
+            <LogOut className="w-4 h-4 mr-2 animate-3d-float" />
             Logout
           </Button>
         </div>
@@ -187,27 +187,29 @@ const Dashboard = () => {
 
       <main className="container mx-auto px-4 py-8">
         {/* Balance Card */}
-        <div className="mb-8 animate-fade-in-up animation-delay-200">
-          <Card className="shadow-elevated transition-all duration-300 hover:scale-105 relative overflow-hidden" style={{ background: "var(--gradient-primary)" }}>
+        <div className="mb-8 animate-3d-slide-up animation-delay-3d-200">
+          <Card className="card-3d shadow-elevated relative overflow-hidden perspective-container" style={{ background: "var(--gradient-primary)" }}>
             {/* Animated Background Elements */}
-            <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full animate-bounce animation-delay-400"></div>
-            <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/10 rounded-full animate-bounce animation-delay-600"></div>
+            <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full bg-3d-element animate-3d-float"></div>
+            <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/10 rounded-full bg-3d-element animate-3d-float animation-delay-3d-200"></div>
+            <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full bg-3d-element animate-3d-float animation-delay-3d-400"></div>
+            <div className="absolute bottom-1/4 right-1/3 w-14 h-14 bg-white/10 rounded-full bg-3d-element animate-3d-float animation-delay-3d-600"></div>
             
             <CardHeader className="relative z-10">
-              <CardDescription className="text-white/80 flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <CardDescription className="text-white/80 flex items-center gap-2 animate-3d-slide-in-left">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-3d-pulse"></div>
                 Available Balance
               </CardDescription>
-              <CardTitle className="text-4xl font-bold text-white animate-bounce-in">
+              <CardTitle className="text-4xl font-bold text-white text-3d animate-3d-bounce">
                 {formatCurrency(profile.balance)}
               </CardTitle>
             </CardHeader>
             <CardContent className="relative z-10">
-              <div className="flex items-center gap-2 text-white/90">
+              <div className="flex items-center gap-2 text-white/90 animate-3d-slide-in-right animation-delay-3d-400">
                 <p className="text-sm">Account: {profile.account_number}</p>
                 <div className="ml-auto">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
-                    <Wallet className="w-4 h-4 text-white" />
+                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover-3d-rotate">
+                    <Wallet className="w-4 h-4 text-white animate-3d-float" />
                   </div>
                 </div>
               </div>
@@ -216,37 +218,37 @@ const Dashboard = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 animate-fade-in-up animation-delay-400">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 animate-3d-slide-up animation-delay-3d-400">
           <Button
             variant={activeTab === "overview" ? "default" : "outline"}
             onClick={() => setActiveTab("overview")}
-            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
+            className="btn-3d hover-3d-lift flex items-center gap-2"
           >
-            <Wallet className="w-4 h-4" />
+            <Wallet className="w-4 h-4 animate-3d-float" />
             Overview
           </Button>
           <Button
             variant={activeTab === "transfer" ? "default" : "outline"}
             onClick={() => setActiveTab("transfer")}
-            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
+            className="btn-3d hover-3d-lift flex items-center gap-2"
           >
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="w-4 h-4 animate-3d-float animation-delay-3d-200" />
             Transfer
           </Button>
           <Button
             variant={activeTab === "history" ? "default" : "outline"}
             onClick={() => setActiveTab("history")}
-            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
+            className="btn-3d hover-3d-lift flex items-center gap-2"
           >
-            <History className="w-4 h-4" />
+            <History className="w-4 h-4 animate-3d-float animation-delay-3d-400" />
             History
           </Button>
           <Button
             variant={activeTab === "contact" ? "default" : "outline"}
             onClick={() => setActiveTab("contact")}
-            className="flex items-center gap-2 transition-all duration-300 hover:scale-105"
+            className="btn-3d hover-3d-lift flex items-center gap-2"
           >
-            <MessageSquare className="w-4 h-4" />
+            <MessageSquare className="w-4 h-4 animate-3d-float animation-delay-3d-600" />
             Contact
           </Button>
         </div>
@@ -255,46 +257,46 @@ const Dashboard = () => {
         <div>
           {activeTab === "overview" && (
             <div className="grid md:grid-cols-3 gap-6">
-              <Card>
+              <Card className="card-3d hover-3d-lift animate-3d-slide-in-left animation-delay-3d-600">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <ArrowUpRight className="w-5 h-5 text-destructive" />
+                    <ArrowUpRight className="w-5 h-5 text-destructive animate-3d-float" />
                     Send Money
                   </CardTitle>
-                  <CardDescription>Transfer to another account</CardDescription>
+                  <CardDescription className="animate-3d-slide-in-left animation-delay-3d-200">Transfer to another account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={() => setActiveTab("transfer")} className="w-full">
+                  <Button onClick={() => setActiveTab("transfer")} className="w-full btn-3d hover-3d-scale">
                     Make Transfer
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-3d hover-3d-lift animate-3d-zoom-in animation-delay-3d-800">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <History className="w-5 h-5 text-primary" />
+                    <History className="w-5 h-5 text-primary animate-3d-float animation-delay-3d-200" />
                     Recent Activity
                   </CardTitle>
-                  <CardDescription>View your transactions</CardDescription>
+                  <CardDescription className="animate-3d-slide-in-left animation-delay-3d-400">View your transactions</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" onClick={() => setActiveTab("history")} className="w-full">
+                  <Button variant="outline" onClick={() => setActiveTab("history")} className="w-full btn-3d hover-3d-scale">
                     View History
                   </Button>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="card-3d hover-3d-lift animate-3d-slide-in-right animation-delay-3d-1000">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-secondary" />
+                    <MessageSquare className="w-5 h-5 text-secondary animate-3d-float animation-delay-3d-400" />
                     Support
                   </CardTitle>
-                  <CardDescription>Get help from our team</CardDescription>
+                  <CardDescription className="animate-3d-slide-in-left animation-delay-3d-600">Get help from our team</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" onClick={() => setActiveTab("contact")} className="w-full">
+                  <Button variant="outline" onClick={() => setActiveTab("contact")} className="w-full btn-3d hover-3d-scale">
                     Contact Us
                   </Button>
                 </CardContent>
