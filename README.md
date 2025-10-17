@@ -31,8 +31,8 @@ A **secure, responsive, and feature-rich online banking system** built using **N
 
 ### 🔹 **Clone the Repository**
 ```bash
-git clone https://github.com/MagedElgawish230/online-banking-system.git  
-cd online-banking-system
+git clone https://github.com/MagedElgawish230/Finova-Bank-.git  
+cd Finova-Bank-
 ```
 
 ### 🔹 **Install Dependencies**
