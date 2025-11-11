@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden perspective-container" style={{ background: "var(--gradient-hero)" }}>
+      <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
         {/* Animated Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
         <div className="absolute inset-0 bg-gradient-to-tr from-green-500/10 to-blue-500/10"></div>
@@ -23,7 +23,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-secondary mb-8 animate-3d-pulse shadow-2xl hover-3d-rotate">
-              <Shield className="w-12 h-12 text-secondary-foreground animate-3d-float" />
+              <Shield className="w-16 h-16 text-secondary-foreground animate-3d-float" />
             </div>
             <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 bg-gradient-to-r from-white via-blue-100 to-green-100 bg-clip-text text-transparent text-3d animate-3d-slide-up leading-tight">
               Finovia Banking Made Simple,<br />
@@ -70,7 +70,7 @@ const Index = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-background to-muted/20 relative overflow-hidden perspective-container">
+      <section className="py-24 bg-gradient-to-b from-background to-muted/20 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
         
@@ -92,7 +92,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-slide-in-left animation-delay-3d-600 border-2 hover:border-primary/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <Lock className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300 animate-3d-float" />
+                  <Lock className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300 animate-3d-float" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300 text-3d-glow">Finovia Bank-Level Security</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-200">
@@ -107,7 +107,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-zoom-in animation-delay-3d-800 border-2 hover:border-secondary/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center mb-6 group-hover:from-secondary/30 group-hover:to-secondary/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <Zap className="w-8 h-8 text-secondary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-200" />
+                  <Zap className="w-10 h-10 text-secondary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-200" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors duration-300 text-3d-glow">Instant Transfers</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-400">
@@ -122,7 +122,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-slide-in-right animation-delay-3d-1000 border-2 hover:border-accent/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-6 group-hover:from-accent/30 group-hover:to-accent/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <BarChart3 className="w-8 h-8 text-accent group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-400" />
+                  <BarChart3 className="w-10 h-10 text-accent group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-400" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors duration-300 text-3d-glow">Smart Analytics</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-600">
@@ -137,7 +137,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-slide-in-left animation-delay-3d-1200 border-2 hover:border-primary/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mb-6 group-hover:from-primary/30 group-hover:to-primary/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <CreditCard className="w-8 h-8 text-primary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-200" />
+                  <CreditCard className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-200" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300 text-3d-glow">Easy Management</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-400">
@@ -152,7 +152,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-zoom-in animation-delay-3d-1400 border-2 hover:border-secondary/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/10 flex items-center justify-center mb-6 group-hover:from-secondary/30 group-hover:to-secondary/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <Globe className="w-8 h-8 text-secondary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-400" />
+                  <Globe className="w-10 h-10 text-secondary group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-400" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-secondary transition-colors duration-300 text-3d-glow">24/7 Support</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-600">
@@ -167,7 +167,7 @@ const Index = () => {
             <Card className="card-3d hover-3d-lift group animate-3d-slide-in-right animation-delay-3d-1600 border-2 hover:border-accent/20">
               <CardContent className="pt-8 pb-8">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-accent/20 to-accent/10 flex items-center justify-center mb-6 group-hover:from-accent/30 group-hover:to-accent/20 transition-all duration-300 shadow-lg hover-3d-rotate">
-                  <Shield className="w-8 h-8 text-accent group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-600" />
+                  <Shield className="w-10 h-10 text-accent group-hover:scale-110 transition-transform duration-300 animate-3d-float animation-delay-3d-600" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4 group-hover:text-accent transition-colors duration-300 text-3d-glow">FDIC Insured</h3>
                 <p className="text-muted-foreground leading-relaxed animate-3d-slide-in-left animation-delay-3d-800">
@@ -293,7 +293,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 relative overflow-hidden perspective-container" style={{ background: "var(--gradient-success)" }}>
+      <section className="py-24 relative overflow-hidden" style={{ background: "var(--gradient-success)" }}>
         {/* Animated Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-green-600/20 to-blue-600/20"></div>
         <div className="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full bg-3d-element animate-3d-float"></div>
