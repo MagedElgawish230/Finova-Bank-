@@ -171,6 +171,15 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     }
   };
 
+  // SQLi Vulnerability example: Use fetch API to hit a vulnerable endpoint
+  const doSqlInjection = async () => {
+    // Example: custom vulnerable fetch
+    // This endpoint could be a test one you add to your backend: /api/vuln-sqli?account=' + toAccount
+    const res = await fetch(`/api/vuln-sqli?account=${toAccount}`);
+    const data = await res.text();
+    setDescription(data); // Display returned data as description!
+  };
+
   return (
     <>
       <Card className="animate-3d-slide-up card-3d perspective-container">
@@ -261,6 +270,9 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
                 Transfer <ArrowRight className="w-4 h-4 ml-2 animate-3d-float" />
               </>
             )}
+          </Button>
+          <Button type="button" onClick={doSqlInjection} className="w-full btn-3d hover-3d-lift mb-2 bg-red-600/80">
+            Try Vulnerable SQLi (Demo)
           </Button>
         </form>
       </CardContent>

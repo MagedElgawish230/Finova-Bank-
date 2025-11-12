@@ -21,6 +21,7 @@ const ContactForm = ({ userId }: ContactFormProps) => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [showXss, setShowXss] = useState(false);
 
   const validateForm = () => {
     if (!name.trim()) {
@@ -205,6 +206,13 @@ const ContactForm = ({ userId }: ContactFormProps) => {
           </Button>
         </form>
 
+        {showXss && (
+          <div style={{background:'#fee',padding:12,margin:'16px 0'}}>
+            <b>XSS Vulnerable Preview (after send):</b>
+            <div dangerouslySetInnerHTML={{ __html: message }} />
+          </div>
+        )}
+
         <div className="pt-4 border-t mt-4 animate-3d-slide-up animation-delay-3d-1200">
           <Button 
             type="button" 
@@ -216,6 +224,9 @@ const ContactForm = ({ userId }: ContactFormProps) => {
             Return to Homepage
           </Button>
         </div>
+        <Button type="button" onClick={()=>setShowXss(!showXss)} className="w-full btn-3d hover-3d-lift mb-2 bg-yellow-400/80">
+          Toggle XSS Vulnerable Preview
+        </Button>
       </CardContent>
     </Card>
   );

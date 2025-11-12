@@ -8,6 +8,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    // INSECURE: Allow ZAP/pen-testing access to all files for test/demo purposes
+    fs: {
+      allow: [path.resolve(__dirname, ".")], // WARNING: This exposes all local files
+    },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
