@@ -23,29 +23,75 @@ const Dashboard = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "transfer" | "history" | "contact">("overview");
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+    let mounted = true;
+    let subscription: any = null;
+    
+    const checkAuth = async () => {
+      // Give more time for session to be established after login
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      if (!mounted) return;
+      
+      const { data: { subscription: sub } } = supabase.auth.onAuthStateChange(
+        (event, session) => {
+          if (!mounted) return;
+          setSession(session);
+          setUser(session?.user ?? null);
+          setIsCheckingAuth(false);
+          // Only redirect on auth state change if session is lost, not on initial load
+          if (!session && event !== 'INITIAL_SESSION' && event !== 'SIGNED_IN') {
+            navigate("/auth");
+          }
+        }
+      );
+      
+      subscription = sub;
+
+      // Try multiple times to get session (in case it's still being established)
+      let session = null;
+      let attempts = 0;
+      while (!session && attempts < 5) {
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        session = currentSession;
         if (!session) {
-          navigate("/auth");
+          await new Promise(resolve => setTimeout(resolve, 300));
+          attempts++;
         }
       }
-    );
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
+      
+      if (!mounted) return;
+      
       setSession(session);
       setUser(session?.user ?? null);
+      setIsCheckingAuth(false);
+      
       if (!session) {
-        navigate("/auth");
+        // Give one more chance - wait a bit longer
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const { data: { session: finalSession } } = await supabase.auth.getSession();
+        if (!finalSession) {
+          console.warn("No session found in Dashboard, redirecting to auth");
+          navigate("/auth");
+        } else {
+          setSession(finalSession);
+          setUser(finalSession?.user ?? null);
+        }
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    checkAuth();
+    
+    return () => {
+      mounted = false;
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
   }, [navigate]);
 
   const fetchProfile = useCallback(async () => {
@@ -150,7 +196,7 @@ const Dashboard = () => {
     }).format(amount);
   };
 
-  if (!profile) {
+  if (isCheckingAuth || !profile) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center space-y-4">

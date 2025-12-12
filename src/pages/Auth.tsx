@@ -55,23 +55,42 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      // Authenticate with Supabase (normal flow only - no vuln-login fallback)
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      if (error) throw error;
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (!data.session) {
+        // Wait a moment for session to be established
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          throw new Error("Session not established. Please try again.");
+        }
+      }
+      
+      // Show success toast
       toast({
         title: "Welcome back!",
         description: "Successfully logged in.",
       });
-      navigate("/dashboard");
+      
+      // Navigate to dashboard
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 500);
     } catch (error: any) {
       let errorMessage = error.message || "An unexpected error occurred. Please try again.";
       
       // Handle specific Supabase errors
       if (error.message?.includes("Email not confirmed")) {
         errorMessage = "Please check your email and click the confirmation link before signing in.";
-      } else if (error.message?.includes("Invalid login credentials")) {
+      } else if (error.message?.includes("Invalid login credentials") || error.message?.includes("Invalid email or password")) {
         errorMessage = "Invalid email or password. Please check your credentials.";
       }
       
