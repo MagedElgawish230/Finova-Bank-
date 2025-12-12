@@ -19,9 +19,10 @@ interface Transaction {
 
 interface TransactionHistoryProps {
   userId: string;
+  onTransactionsRefresh?: () => void;
 }
 
-const TransactionHistory = ({ userId }: TransactionHistoryProps) => {
+const TransactionHistory = ({ userId, onTransactionsRefresh }: TransactionHistoryProps) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +44,9 @@ const TransactionHistory = ({ userId }: TransactionHistoryProps) => {
         setTransactions([]);
       } else {
         setTransactions(data || []);
+        if (onTransactionsRefresh) {
+          onTransactionsRefresh();
+        }
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -134,9 +138,8 @@ const TransactionHistory = ({ userId }: TransactionHistoryProps) => {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center hover-3d-rotate ${
-                      isSent ? "bg-destructive/10" : "bg-secondary/10"
-                    }`}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center hover-3d-rotate ${isSent ? "bg-destructive/10" : "bg-secondary/10"
+                      }`}
                   >
                     {isSent ? (
                       <ArrowUpRight className="w-5 h-5 text-destructive animate-3d-float" />

@@ -30,13 +30,13 @@ const Dashboard = () => {
   useEffect(() => {
     let mounted = true;
     let subscription: any = null;
-    
+
     const checkAuth = async () => {
       // Give more time for session to be established after login
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       if (!mounted) return;
-      
+
       const { data: { subscription: sub } } = supabase.auth.onAuthStateChange(
         (event, session) => {
           if (!mounted) return;
@@ -49,7 +49,7 @@ const Dashboard = () => {
           }
         }
       );
-      
+
       subscription = sub;
 
       // Try multiple times to get session (in case it's still being established)
@@ -63,13 +63,13 @@ const Dashboard = () => {
           attempts++;
         }
       }
-      
+
       if (!mounted) return;
-      
+
       setSession(session);
       setUser(session?.user ?? null);
       setIsCheckingAuth(false);
-      
+
       if (!session) {
         // Give one more chance - wait a bit longer
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -85,7 +85,7 @@ const Dashboard = () => {
     };
 
     checkAuth();
-    
+
     return () => {
       mounted = false;
       if (subscription) {
@@ -112,10 +112,10 @@ const Dashboard = () => {
 
       // If no profile exists, create one
       console.log("No profile found, creating new profile...");
-      
+
       // Generate a simple account number
       const accountNumber = Date.now().toString().slice(-10); // Use timestamp for uniqueness
-      
+
       const { data: newProfile, error: createError } = await supabase
         .from("profiles")
         .insert({
@@ -130,7 +130,7 @@ const Dashboard = () => {
 
       if (createError) {
         console.error("Profile creation error:", createError);
-        
+
         // If profile already exists (race condition), try to fetch it
         if (createError.code === '23505') {
           console.log("Profile already exists, fetching...");
@@ -181,6 +181,27 @@ const Dashboard = () => {
   useEffect(() => {
     if (user) {
       fetchProfile();
+
+      const channel = supabase
+        .channel('schema-db-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'profiles',
+            filter: `id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log("Profile updated via realtime:", payload);
+            setProfile(payload.new as Profile);
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
     }
   }, [user, fetchProfile]);
 
@@ -240,7 +261,7 @@ const Dashboard = () => {
             <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/10 rounded-full bg-3d-element"></div>
             <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full bg-3d-element"></div>
             <div className="absolute bottom-1/4 right-1/3 w-14 h-14 bg-white/10 rounded-full bg-3d-element"></div>
-            
+
             <CardHeader className="relative z-10">
               <CardDescription className="text-white/80 flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
@@ -354,7 +375,7 @@ const Dashboard = () => {
             <TransferForm profile={profile} onSuccess={fetchProfile} />
           )}
 
-          {activeTab === "history" && <TransactionHistory userId={user?.id || ""} />}
+          {activeTab === "history" && <TransactionHistory userId={user?.id || ""} onTransactionsRefresh={fetchProfile} />}
 
           {activeTab === "contact" && <ContactForm userId={user?.id || ""} />}
         </div>
