@@ -195,12 +195,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     }
   };
 
-  // SQLi Vulnerability example
-  const doSqlInjection = async () => {
-    const res = await fetch(`/api/vuln-sqli?account=${toAccount}`);
-    const data = await res.text();
-    setDescription(data);
-  };
+
 
   return (
     <>
@@ -297,9 +292,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
                 </>
               )}
             </Button>
-            <Button type="button" onClick={doSqlInjection} variant="destructive" className="w-full opacity-80 hover:opacity-100 text-xs text-white">
-              Try Vulnerable SQLi (Demo)
-            </Button>
+
           </form>
         </CardContent>
       </Card>
