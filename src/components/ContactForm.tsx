@@ -84,9 +84,9 @@ const ContactForm = ({ userId }: ContactFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setLoading(true);
 
     try {
@@ -121,110 +121,114 @@ const ContactForm = ({ userId }: ContactFormProps) => {
   };
 
   return (
-    <Card className="animate-3d-slide-up card-3d perspective-container">
+    <Card className="max-w-xl mx-auto border-none shadow-xl glass-card">
       <CardHeader>
-        <CardTitle className="text-3d-glow animate-3d-pulse">Contact Support</CardTitle>
-        <CardDescription className="animate-3d-slide-in-left animation-delay-3d-200">Have questions? We're here to help!</CardDescription>
+        <CardTitle className="text-2xl font-bold flex items-center gap-3">
+          <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
+            <Mail className="w-6 h-6" />
+          </div>
+          Contact Support
+        </CardTitle>
+        <CardDescription>Have questions? We're here to help!</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-2 animate-3d-slide-in-left animation-delay-3d-200">
-              <Label htmlFor="name" className="text-sm font-semibold flex items-center gap-2 hover-3d-tilt">
-                <User className="w-4 h-4 text-primary animate-3d-float" />
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-sm font-semibold flex items-center gap-2">
+                <User className="w-4 h-4 text-primary" />
                 Full Name
               </Label>
-              <div className="relative group">
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="Your full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="input-3d transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
-                  required
-                />
-              </div>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="h-11 transition-all focus:scale-[1.01] bg-white/50 border-white/20 focus:bg-white"
+                required
+              />
             </div>
 
-            <div className="space-y-2 animate-3d-slide-in-right animation-delay-3d-400">
-              <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2 hover-3d-tilt">
-                <Mail className="w-4 h-4 text-primary animate-3d-float animation-delay-3d-200" />
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-semibold flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
                 Email Address
               </Label>
-              <div className="relative group">
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="input-3d transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
-                  required
-                />
-              </div>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-11 transition-all focus:scale-[1.01] bg-white/50 border-white/20 focus:bg-white"
+                required
+              />
             </div>
           </div>
 
-          <div className="space-y-2 animate-3d-zoom-in animation-delay-3d-600">
-            <Label htmlFor="subject" className="hover-3d-tilt">Subject</Label>
+          <div className="space-y-2">
+            <Label htmlFor="subject">Subject</Label>
             <Input
               id="subject"
               type="text"
               placeholder="How can we help?"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              className="input-3d"
+              className="h-11 bg-white/50 border-white/20 focus:bg-white"
               required
             />
           </div>
 
-          <div className="space-y-2 animate-3d-zoom-in animation-delay-3d-800">
-            <Label htmlFor="message" className="hover-3d-tilt">Message</Label>
+          <div className="space-y-2">
+            <Label htmlFor="message">Message</Label>
             <Textarea
               id="message"
               placeholder="Tell us more about your inquiry..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               rows={5}
-              className="input-3d"
+              className="resize-none bg-white/50 border-white/20 focus:bg-white"
               required
             />
           </div>
 
-          <Button type="submit" className="w-full btn-3d animate-3d-bounce animation-delay-3d-1000" disabled={loading}>
+          <Button type="submit" className="w-full h-11 text-lg shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 bg-green-600 hover:bg-green-700" disabled={loading}>
             {loading ? (
               <>
-                <div className="animate-3d-spin mr-2">⏳</div>
                 Sending...
               </>
             ) : (
               <>
-                Send Message <Send className="w-4 h-4 ml-2 animate-3d-float" />
+                Send Message <Send className="w-4 h-4 ml-2" />
               </>
             )}
           </Button>
         </form>
 
         {showXss && (
-          <div style={{background:'#fee',padding:12,margin:'16px 0'}}>
+          <div style={{ background: '#fee', padding: 12, margin: '16px 0' }}>
             <b>XSS Vulnerable Preview (after send):</b>
             <div dangerouslySetInnerHTML={{ __html: message }} />
           </div>
         )}
 
-        <div className="pt-4 border-t mt-4 animate-3d-slide-up animation-delay-3d-1200">
-          <Button 
-            type="button" 
-            variant="outline" 
-            className="w-full btn-3d hover-3d-lift" 
+        <div className="pt-4 border-t mt-6">
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full h-11 hover:bg-secondary/5 border-secondary/20"
             onClick={() => navigate("/")}
           >
-            <Home className="w-4 h-4 mr-2 animate-3d-float" />
+            <Home className="w-4 h-4 mr-2" />
             Return to Homepage
           </Button>
         </div>
-        <Button type="button" onClick={()=>setShowXss(!showXss)} className="w-full btn-3d hover-3d-lift mb-2 bg-yellow-400/80">
+        <Button
+          type="button"
+          onClick={() => setShowXss(!showXss)}
+          className="w-full mt-4 bg-yellow-400/80 hover:bg-yellow-400 text-black h-9 text-xs"
+        >
           Toggle XSS Vulnerable Preview
         </Button>
       </CardContent>

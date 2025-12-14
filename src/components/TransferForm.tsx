@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, Shield, ArrowUpRight } from "lucide-react";
 
@@ -158,13 +158,21 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
         return;
       }
 
-      if (!response.ok) {
-        throw new Error("Transfer failed. Please try again.");
-      }
+      // Create transaction record
+      const { error: transactionError } = await supabase
+        .from("transactions")
+        .insert({
+          from_user_id: profile.id,
+          to_user_id: recipient.id,
+          from_account_number: profile.account_number,
+          to_account_number: toAccount,
+          amount: transferAmount,
+          transaction_type: "transfer",
+          status: "completed",
+          description: description.trim() || "Money transfer",
+        });
 
-      // Create transaction record (Simulated by Gateway or continued if needed, but per instructions we stop here and success falls through)
-      // Note: In a real app, the gateway would forward to Supabase or return the inserted record.
-      // We assume success here as 200 OK.
+      if (transactionError) throw transactionError;
 
       toast({
         title: "Transfer Successful!",
@@ -187,27 +195,30 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     }
   };
 
-  // SQLi Vulnerability example: Use fetch API to hit a vulnerable endpoint
+  // SQLi Vulnerability example
   const doSqlInjection = async () => {
-    // Example: custom vulnerable fetch
-    // This endpoint could be a test one you add to your backend: /api/vuln-sqli?account=' + toAccount
     const res = await fetch(`/api/vuln-sqli?account=${toAccount}`);
     const data = await res.text();
-    setDescription(data); // Display returned data as description!
+    setDescription(data);
   };
 
   return (
     <>
-      <Card className="animate-3d-slide-up card-3d perspective-container">
+      <Card className="max-w-xl mx-auto border-none shadow-xl glass-card">
         <CardHeader>
-          <CardTitle className="text-3d-glow animate-3d-pulse">Transfer Money</CardTitle>
-          <CardDescription className="animate-3d-slide-in-left animation-delay-3d-200">Send money to another Finovia Bank account</CardDescription>
+          <CardTitle className="text-2xl font-bold flex items-center gap-3">
+            <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-blue-600 dark:text-blue-400">
+              <ArrowUpRight className="w-6 h-6" />
+            </div>
+            Transfer Money
+          </CardTitle>
+          <CardDescription>Send money to another Finovia Bank account</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleTransfer} className="space-y-6">
-            <div className="space-y-2 animate-3d-slide-in-left animation-delay-3d-200">
-              <Label htmlFor="toAccount" className="text-sm font-semibold flex items-center gap-2 hover-3d-tilt">
-                <ArrowUpRight className="w-4 h-4 text-primary animate-3d-float" />
+            <div className="space-y-2">
+              <Label htmlFor="toAccount" className="text-sm font-semibold flex items-center gap-2">
+                <Shield className="w-4 h-4 text-primary" />
                 Recipient Account Number
               </Label>
               <div className="relative group">
@@ -221,21 +232,21 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
                     setToAccount(value);
                   }}
                   maxLength={10}
-                  className="input-3d transition-all duration-300 focus:scale-105 focus:shadow-lg border-2 hover:border-primary/50 focus:border-primary"
+                  className="h-11 transition-all duration-300 focus:scale-[1.01] focus:shadow-md bg-white/50 border-white/20 focus:bg-white"
                   required
                 />
-                <div className="absolute right-3 top-3 text-xs text-muted-foreground animate-3d-pulse">
+                <div className="absolute right-3 top-3.5 text-xs text-muted-foreground bg-white/50 px-2 py-0.5 rounded">
                   {toAccount.length}/10
                 </div>
               </div>
-              <p className="text-xs text-muted-foreground animate-3d-slide-in-left animation-delay-3d-300">
+              <p className="text-xs text-muted-foreground">
                 Enter the 10-digit account number of the recipient
               </p>
             </div>
 
-            <div className="space-y-2 animate-3d-slide-in-right animation-delay-3d-400">
-              <Label htmlFor="amount" className="text-sm font-semibold flex items-center gap-2 hover-3d-tilt">
-                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center animate-3d-float animation-delay-3d-200">
+            <div className="space-y-2">
+              <Label htmlFor="amount" className="text-sm font-semibold flex items-center gap-2">
+                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs font-bold">$</span>
                 </div>
                 Transfer Amount
@@ -254,40 +265,39 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
                       setAmount(value);
                     }
                   }}
-                  className="input-3d"
+                  className="h-11 bg-white/50 border-white/20 focus:bg-white"
                   required
                 />
               </div>
-              <p className="text-sm text-muted-foreground animate-3d-slide-in-left animation-delay-3d-500">
+              <p className="text-sm text-muted-foreground">
                 Available balance: ${profile.balance.toFixed(2)}
               </p>
             </div>
 
-            <div className="space-y-2 animate-3d-zoom-in animation-delay-3d-600">
-              <Label htmlFor="description" className="hover-3d-tilt">Description (Optional)</Label>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description (Optional)</Label>
               <Textarea
                 id="description"
                 placeholder="What's this transfer for?"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="input-3d"
+                className="resize-none bg-white/50 border-white/20 focus:bg-white"
               />
             </div>
 
-            <Button type="submit" className="w-full btn-3d hover-3d-lift animate-3d-bounce animation-delay-3d-800" disabled={loading}>
+            <Button type="submit" className="w-full h-11 text-lg shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 bg-blue-600 hover:bg-blue-700" disabled={loading}>
               {loading ? (
                 <>
-                  <div className="animate-3d-spin mr-2">⏳</div>
                   Processing...
                 </>
               ) : (
                 <>
-                  Transfer <ArrowRight className="w-4 h-4 ml-2 animate-3d-float" />
+                  Transfer <ArrowRight className="w-4 h-4 ml-2" />
                 </>
               )}
             </Button>
-            <Button type="button" onClick={doSqlInjection} className="w-full btn-3d hover-3d-lift mb-2 bg-red-600/80">
+            <Button type="button" onClick={doSqlInjection} variant="destructive" className="w-full opacity-80 hover:opacity-100 text-xs text-white">
               Try Vulnerable SQLi (Demo)
             </Button>
           </form>
@@ -295,35 +305,34 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
       </Card>
 
       <AlertDialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <AlertDialogContent className="card-3d perspective-container">
+        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-3d-glow animate-3d-pulse">
-              <Shield className="w-5 h-5 text-primary animate-3d-float" />
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Shield className="w-5 h-5 text-primary" />
               Confirm Transfer
             </AlertDialogTitle>
-            <AlertDialogDescription className="animate-3d-slide-in-left">
+            <AlertDialogDescription>
               Please review your transfer details before confirming:
-              <div className="mt-4 p-4 bg-muted rounded-lg space-y-2 animate-3d-zoom-in animation-delay-3d-200">
-                <div className="hover-3d-tilt"><strong>To Account:</strong> {toAccount}</div>
-                <div className="hover-3d-tilt"><strong>Amount:</strong> ${parseFloat(amount || "0").toFixed(2)}</div>
-                <div className="hover-3d-tilt"><strong>Description:</strong> {description || "Money transfer"}</div>
+              <div className="mt-4 p-4 bg-muted rounded-lg space-y-2 text-foreground">
+                <div><strong>To Account:</strong> {toAccount}</div>
+                <div><strong>Amount:</strong> ${parseFloat(amount || "0").toFixed(2)}</div>
+                <div><strong>Description:</strong> {description || "Money transfer"}</div>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground animate-3d-slide-in-left animation-delay-3d-400">
+              <p className="mt-4 text-sm text-muted-foreground">
                 This action cannot be undone. Are you sure you want to proceed?
               </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={loading} className="btn-3d hover-3d-lift">Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmTransfer} disabled={loading} className="btn-3d hover-3d-lift">
+            <AlertDialogCancel disabled={loading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmTransfer} disabled={loading} className="bg-primary hover:bg-primary/90">
               {loading ? (
                 <>
-                  <div className="animate-3d-spin mr-2">⏳</div>
                   Processing...
                 </>
               ) : (
                 <>
-                  <Shield className="w-4 h-4 mr-2 animate-3d-float" />
+                  <Shield className="w-4 h-4 mr-2" />
                   Confirm Transfer
                 </>
               )}

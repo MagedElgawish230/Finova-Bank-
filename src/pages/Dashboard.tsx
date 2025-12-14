@@ -5,7 +5,7 @@ import { User, Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, ArrowUpRight, ArrowDownLeft, History, MessageSquare, Wallet } from "lucide-react";
+import { LogOut, ArrowUpRight, History, MessageSquare, Wallet } from "lucide-react";
 import TransferForm from "@/components/TransferForm";
 import TransactionHistory from "@/components/TransactionHistory";
 import ContactForm from "@/components/ContactForm";
@@ -20,7 +20,7 @@ interface Profile {
 
 const Dashboard = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
+  const [_session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "transfer" | "history" | "contact">("overview");
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
@@ -29,6 +29,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     let mounted = true;
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     let subscription: any = null;
 
     const checkAuth = async () => {
@@ -99,7 +100,7 @@ const Dashboard = () => {
 
     try {
       // First, try to get existing profile
-      const { data: existingProfile, error: fetchError } = await supabase
+      const { data: existingProfile, error: _fetchError } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", user.id)
@@ -234,50 +235,53 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b bg-card shadow-sm">
+      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-              <Wallet className="w-5 h-5 text-secondary-foreground" />
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Wallet className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Finovia Bank</h1>
+              <h1 className="text-xl font-bold">Finovia Bank</h1>
               <p className="text-sm text-muted-foreground">Welcome, {profile.full_name}</p>
             </div>
           </div>
-          <Button variant="outline" onClick={handleLogout} className="btn-3d hover-3d-lift">
+          <Button variant="ghost" onClick={handleLogout} className="hover:bg-destructive/10 hover:text-destructive transition-colors">
             <LogOut className="w-4 h-4 mr-2" />
             Logout
           </Button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Balance Card */}
         <div className="mb-8">
-          <Card className="shadow-elevated relative overflow-hidden" style={{ background: "var(--gradient-primary)" }}>
-            {/* Animated Background Elements */}
-            <div className="absolute top-4 right-4 w-20 h-20 bg-white/10 rounded-full bg-3d-element"></div>
-            <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/10 rounded-full bg-3d-element"></div>
-            <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-white/10 rounded-full bg-3d-element"></div>
-            <div className="absolute bottom-1/4 right-1/3 w-14 h-14 bg-white/10 rounded-full bg-3d-element"></div>
+          <Card className="overflow-hidden border-none shadow-xl relative min-h-[240px] flex flex-col justify-between group rounded-3xl">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary via-purple-600 to-accent opacity-100 transition-all duration-500" />
 
-            <CardHeader className="relative z-10">
-              <CardDescription className="text-white/80 flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+            {/* Mesh Gradient Overlay */}
+            <div className="absolute top-[-50%] right-[-20%] w-[500px] h-[500px] rounded-full bg-white/10 blur-[80px]" />
+            <div className="absolute bottom-[-30%] left-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/20 blur-[60px]" />
+
+            <CardHeader className="relative z-10 pb-2">
+              <CardDescription className="text-white/80 font-medium flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 bg-secondary rounded-full animate-pulse shadow-[0_0_10px_rgba(var(--secondary),0.5)]"></div>
                 Available Balance
               </CardDescription>
-              <CardTitle className="text-4xl font-bold text-white">
+              <CardTitle className="text-5xl md:text-6xl font-bold text-white tracking-tight drop-shadow-sm">
                 {formatCurrency(profile.balance)}
               </CardTitle>
             </CardHeader>
             <CardContent className="relative z-10">
-              <div className="flex items-center gap-2 text-white/90">
-                <p className="text-sm">Account: {profile.account_number}</p>
-                <div className="ml-auto">
-                  <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                    <Wallet className="w-4 h-4 text-white" />
-                  </div>
+              <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 hover:bg-white/15 transition-colors">
+                <div className="space-y-1">
+                  <p className="text-white/60 text-xs uppercase tracking-wider font-semibold">Account Number</p>
+                  <p className="text-white font-mono tracking-widest text-lg">
+                    **** **** {profile.account_number.slice(-4)}
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-white/20 rounded-xl backdrop-blur-sm flex items-center justify-center shadow-inner">
+                  <Wallet className="w-6 h-6 text-white" />
                 </div>
               </div>
             </CardContent>
@@ -285,87 +289,87 @@ const Dashboard = () => {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+        <div className="flex gap-2 mb-8 overflow-x-auto pb-4 scrollbar-hide">
           <Button
-            variant={activeTab === "overview" ? "default" : "outline"}
+            variant={activeTab === "overview" ? "default" : "ghost"}
             onClick={() => setActiveTab("overview")}
-            className="btn-3d hover-3d-lift flex items-center gap-2"
+            className={`rounded-full px-6 ${activeTab === "overview" ? "shadow-md scale-105" : "hover:bg-muted/50"} transition-all`}
           >
-            <Wallet className="w-4 h-4" />
+            <Wallet className="w-4 h-4 mr-2" />
             Overview
           </Button>
           <Button
-            variant={activeTab === "transfer" ? "default" : "outline"}
+            variant={activeTab === "transfer" ? "default" : "ghost"}
             onClick={() => setActiveTab("transfer")}
-            className="btn-3d hover-3d-lift flex items-center gap-2"
+            className={`rounded-full px-6 ${activeTab === "transfer" ? "shadow-md scale-105" : "hover:bg-muted/50"} transition-all`}
           >
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="w-4 h-4 mr-2" />
             Transfer
           </Button>
           <Button
-            variant={activeTab === "history" ? "default" : "outline"}
+            variant={activeTab === "history" ? "default" : "ghost"}
             onClick={() => setActiveTab("history")}
-            className="btn-3d hover-3d-lift flex items-center gap-2"
+            className={`rounded-full px-6 ${activeTab === "history" ? "shadow-md scale-105" : "hover:bg-muted/50"} transition-all`}
           >
-            <History className="w-4 h-4" />
+            <History className="w-4 h-4 mr-2" />
             History
           </Button>
           <Button
-            variant={activeTab === "contact" ? "default" : "outline"}
+            variant={activeTab === "contact" ? "default" : "ghost"}
             onClick={() => setActiveTab("contact")}
-            className="btn-3d hover-3d-lift flex items-center gap-2"
+            className={`rounded-full px-6 ${activeTab === "contact" ? "shadow-md scale-105" : "hover:bg-muted/50"} transition-all`}
           >
-            <MessageSquare className="w-4 h-4" />
+            <MessageSquare className="w-4 h-4 mr-2" />
             Contact
           </Button>
         </div>
 
         {/* Content Area */}
-        <div>
+        <div className="animate-fade-in-up">
           {activeTab === "overview" && (
             <div className="grid md:grid-cols-3 gap-6">
-              <Card className="hover-3d-lift">
+              <Card className="glass-card border-none hover:bg-card/50 cursor-pointer group" onClick={() => setActiveTab("transfer")}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ArrowUpRight className="w-5 h-5 text-destructive" />
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                      <ArrowUpRight className="w-6 h-6" />
+                    </div>
                     Send Money
                   </CardTitle>
-                  <CardDescription>Transfer to another account</CardDescription>
+                  <CardDescription>Transfer to another Finovia account</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={() => setActiveTab("transfer")} className="w-full btn-3d hover-3d-scale">
-                    Make Transfer
-                  </Button>
+                  <Button className="w-full rounded-xl hover-lift bg-blue-600 hover:bg-blue-700 text-white shadow-md">Make Transfer</Button>
                 </CardContent>
               </Card>
 
-              <Card className="hover-3d-lift">
+              <Card className="glass-card border-none hover:bg-card/50 cursor-pointer group" onClick={() => setActiveTab("history")}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <History className="w-5 h-5 text-primary" />
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-xl text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                      <History className="w-6 h-6" />
+                    </div>
                     Recent Activity
                   </CardTitle>
-                  <CardDescription>View your transactions</CardDescription>
+                  <CardDescription>View your transaction history</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" onClick={() => setActiveTab("history")} className="w-full btn-3d hover-3d-scale">
-                    View History
-                  </Button>
+                  <Button className="w-full rounded-xl hover-lift bg-purple-600 hover:bg-purple-700 text-white shadow-md">View History</Button>
                 </CardContent>
               </Card>
 
-              <Card className="hover-3d-lift">
+              <Card className="glass-card border-none hover:bg-card/50 cursor-pointer group" onClick={() => setActiveTab("contact")}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-secondary" />
+                  <CardTitle className="flex items-center gap-3 text-lg">
+                    <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform">
+                      <MessageSquare className="w-6 h-6" />
+                    </div>
                     Support
                   </CardTitle>
                   <CardDescription>Get help from our team</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button variant="outline" onClick={() => setActiveTab("contact")} className="w-full btn-3d hover-3d-scale">
-                    Contact Us
-                  </Button>
+                  <Button className="w-full rounded-xl hover-lift bg-green-600 hover:bg-green-700 text-white shadow-md">Contact Us</Button>
                 </CardContent>
               </Card>
             </div>
