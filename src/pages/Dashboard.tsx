@@ -277,7 +277,7 @@ const Dashboard = () => {
                 <div className="space-y-1">
                   <p className="text-white/60 text-xs uppercase tracking-wider font-semibold">Account Number</p>
                   <p className="text-white font-mono tracking-widest text-lg">
-                    **** **** {profile.account_number.slice(-4)}
+                    {profile.account_number}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl backdrop-blur-sm flex items-center justify-center shadow-inner">
