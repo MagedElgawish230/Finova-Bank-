@@ -15,6 +15,10 @@ async function check() {
     }
     console.log("ALL TRANSACTIONS:");
     console.log(JSON.stringify(data, null, 2));
+
+    const { data: profiles } = await supabase.from("profiles").select("full_name, balance, account_number");
+    console.log("PROFILES:");
+    console.log(JSON.stringify(profiles, null, 2));
 }
 
 check();

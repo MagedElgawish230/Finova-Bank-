@@ -39,8 +39,8 @@ async function reconcileBalances() {
             .eq("from_user_id", profile.id)
             .eq("status", "completed");
 
-        const totalIncoming = (incoming || []).reduce((acc, tx) => acc + tx.amount, 0);
-        const totalOutgoing = (outgoing || []).reduce((acc, tx) => acc + tx.amount, 0);
+        const totalIncoming = (incoming || []).reduce((acc, tx) => acc + Number(tx.amount), 0);
+        const totalOutgoing = (outgoing || []).reduce((acc, tx) => acc + Number(tx.amount), 0);
 
         console.log(`Current Balance: ${profile.balance}`);
         console.log(`Total Received: ${totalIncoming}`);
