@@ -135,7 +135,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
       if (recipientUpdateError) throw recipientUpdateError;
 
       // Route request through AI Firewall Gateway
-      const response = await fetch("http://192.168.10.1/api/secure-transfer", {
+      const response = await fetch("/api/secure-transfer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
