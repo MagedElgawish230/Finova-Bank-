@@ -99,6 +99,38 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     try {
       const transferAmount = parseFloat(amount);
 
+      // 1. ROUTE REQUEST THROUGH AI FIREWALL GATEWAY FIRST
+      // We must verify the request is safe BEFORE touching the database.
+      const firewallResponse = await fetch("/api/secure-transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from_account: profile.account_number,
+          to_account: toAccount,
+          amount: transferAmount,
+          description: description.trim() || "Money transfer",
+        }),
+      });
+
+      if (firewallResponse.status === 403) {
+        toast({
+          variant: "destructive",
+          title: "Security Alert 🛡️",
+          description: "Malicious payload detected! Request blocked by AI Firewall.",
+        });
+        // CRITICAL: Stop execution here. Do not process transaction.
+        setLoading(false);
+        return;
+      }
+
+      if (!firewallResponse.ok) {
+        throw new Error("Firewall validation failed. Network error?");
+      }
+
+      // 2. IF FIREWALL ALLOWS (200 OK), PROCEED WITH TRANSACTION
+
       // Find recipient
       const { data: recipient, error: recipientError } = await supabase
         .from("profiles")
@@ -133,30 +165,6 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
         .eq("id", recipient.id);
 
       if (recipientUpdateError) throw recipientUpdateError;
-
-      // Route request through AI Firewall Gateway
-      const response = await fetch("/api/secure-transfer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from_account: profile.account_number,
-          to_account: toAccount,
-          amount: transferAmount,
-          description: description.trim() || "Money transfer",
-        }),
-      });
-
-      if (response.status === 403) {
-        toast({
-          variant: "destructive",
-          title: "Security Alert 🛡️",
-          description: "Malicious payload detected! Request blocked by AI Firewall.",
-        });
-        setLoading(false);
-        return;
-      }
 
       // Create transaction record
       const { error: transactionError } = await supabase

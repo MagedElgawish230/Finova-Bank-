@@ -131,6 +131,15 @@ app.get('/api/search-vulnerable', (req, res) => {
     res.send(html);
 });
 
+// 4. Secure Transfer Endpoint (Validation Only)
+// This endpoint receives requests that have PASSED the AI Firewall.
+// If the firewall blocked the request, it would never reach here (403).
+// If it reaches here, we simply return 200 OK so the frontend knows to proceed.
+app.post('/api/secure-transfer', (req, res) => {
+    console.log("[Secure Transfer] Request passed firewall validation.");
+    res.json({ success: true, message: "Request validated by firewall." });
+});
+
 // Example of a secure endpoint (placeholder)
 // app.get('/api/secure-endpoint', (req, res) => { ... });
 
