@@ -294,7 +294,7 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
               <div className="mt-4 p-4 bg-muted rounded-lg space-y-2 text-foreground">
                 <div><strong>To Account:</strong> {toAccount}</div>
                 <div><strong>Amount:</strong> ${parseFloat(amount || "0").toFixed(2)}</div>
-                <div><strong>Description:</strong> {description || "Money transfer"}</div>
+                <div className="break-all"><strong>Description:</strong> {description || "Money transfer"}</div>
               </div>
               <p className="mt-4 text-sm text-muted-foreground">
                 This action cannot be undone. Are you sure you want to proceed?
