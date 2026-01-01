@@ -99,9 +99,18 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
     try {
       const transferAmount = parseFloat(amount);
 
-      // 1. ROUTE REQUEST THROUGH AI FIREWALL GATEWAY FIRST
-      // We must verify the request is safe BEFORE touching the database.
-      const firewallResponse = await fetch("/api/secure-transfer", {
+      // Get session token for server-side authentication
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        throw new Error("Session expired. Please log in again.");
+      }
+
+      const sessionToken = session.access_token;
+
+      // ===== STEP 1: WAF/Firewall Check =====
+      // Send request through AI Firewall Gateway first
+      const wafResponse = await fetch("/api/secure-transfer", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,77 +123,44 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
         }),
       });
 
-      if (firewallResponse.status === 403) {
+      // If WAF blocks the request (403), stop immediately
+      if (wafResponse.status === 403) {
         toast({
           variant: "destructive",
           title: "Security Alert 🛡️",
           description: "Malicious payload detected! Request blocked by AI Firewall.",
         });
-        // CRITICAL: Stop execution here. Do not process transaction.
         setLoading(false);
+        setShowConfirmDialog(false);
         return;
       }
 
-      if (!firewallResponse.ok) {
-        throw new Error("Firewall validation failed. Network error?");
-      }
-
-      // 2. IF FIREWALL ALLOWS (200 OK), PROCEED WITH TRANSACTION
-
-      // Find recipient
-      const { data: recipient, error: recipientError } = await supabase
-        .from("profiles")
-        .select("id, full_name")
-        .eq("account_number", toAccount)
-        .single();
-
-      if (recipientError || !recipient) {
-        throw new Error("Recipient account not found. Please verify the account number.");
-      }
-
-      // Update sender balance
-      const { error: senderError } = await supabase
-        .from("profiles")
-        .update({ balance: profile.balance - transferAmount })
-        .eq("id", profile.id);
-
-      if (senderError) throw senderError;
-
-      // Update recipient balance
-      const { data: recipientProfile, error: recipientProfileError } = await supabase
-        .from("profiles")
-        .select("balance")
-        .eq("id", recipient.id)
-        .single();
-
-      if (recipientProfileError) throw recipientProfileError;
-
-      const { error: recipientUpdateError } = await supabase
-        .from("profiles")
-        .update({ balance: (recipientProfile.balance || 0) + transferAmount })
-        .eq("id", recipient.id);
-
-      if (recipientUpdateError) throw recipientUpdateError;
-
-      // Create transaction record
-      const { error: transactionError } = await supabase
-        .from("transactions")
-        .insert({
-          from_user_id: profile.id,
-          to_user_id: recipient.id,
-          from_account_number: profile.account_number,
-          to_account_number: toAccount,
+      // ===== STEP 2: Execute Secure Transfer =====
+      // WAF passed, now execute the actual transfer via secure backend
+      const transferResponse = await fetch("/api/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from_account: profile.account_number,
+          to_account: toAccount,
           amount: transferAmount,
-          transaction_type: "transfer",
-          status: "completed",
           description: description.trim() || "Money transfer",
-        });
+          session_token: sessionToken,
+        }),
+      });
 
-      if (transactionError) throw transactionError;
+      const transferResult = await transferResponse.json();
 
+      if (!transferResponse.ok || !transferResult.success) {
+        throw new Error(transferResult.error || "Transfer failed. Please try again.");
+      }
+
+      // Success!
       toast({
         title: "Transfer Successful!",
-        description: `Successfully transferred $${transferAmount.toFixed(2)} to ${recipient.full_name} (${toAccount})`,
+        description: transferResult.message || `Successfully transferred $${transferAmount.toFixed(2)} to ${toAccount}`,
       });
 
       setToAccount("");
@@ -192,11 +168,12 @@ const TransferForm = ({ profile, onSuccess }: TransferFormProps) => {
       setDescription("");
       setShowConfirmDialog(false);
       onSuccess();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred. Please try again.";
       toast({
         variant: "destructive",
         title: "Transfer Failed",
-        description: error.message || "An unexpected error occurred. Please try again.",
+        description: errorMessage,
       });
     } finally {
       setLoading(false);
