@@ -290,6 +290,71 @@ app.post('/api/transfer', async (req, res) => {
     }
 });
 
+// Secure Login Endpoint
+// Wraps supabase.auth.signInWithPassword to allow WAF inspection of credentials
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    if (!supabase) {
+        return res.status(500).json({ error: "Auth service unavailable" });
+    }
+
+    try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            console.warn(`[Auth] Login failed for ${email}: ${error.message}`);
+            return res.status(401).json({ error: error.message });
+        }
+
+        console.log(`[Auth] User logged in: ${data.user.id}`);
+        return res.json({ session: data.session, user: data.user });
+    } catch (err) {
+        console.error("[Auth] Login error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Secure Signup Endpoint
+// Wraps supabase.auth.signUp to allow WAF inspection of registration data
+app.post('/api/signup', async (req, res) => {
+    const { email, password, options } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ error: "Email and password are required" });
+    }
+
+    if (!supabase) {
+        return res.status(500).json({ error: "Auth service unavailable" });
+    }
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options // Pass through metadata like full_name
+        });
+
+        if (error) {
+            console.warn(`[Auth] Signup failed for ${email}: ${error.message}`);
+            return res.status(400).json({ error: error.message });
+        }
+
+        console.log(`[Auth] User signed up: ${data.user ? data.user.id : 'Pending verification'}`);
+        return res.json({ session: data.session, user: data.user });
+    } catch (err) {
+        console.error("[Auth] Signup error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 // ---- VULNERABLE ENDPOINTS (DEMO ONLY) ----
 
 // 1. SQL Injection Vulnerability (Real Supabase Data)

@@ -29,24 +29,44 @@ const SignUp = () => {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
+      // Defense in Depth: Route signup request through Backend WAF first
+      const response = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+            },
           },
-        },
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
 
-      if (data) {
+      if (!response.ok) {
+        throw new Error(data.error || "Signup failed");
+      }
+
+      if (data.session) {
+        // If we got a session back, auto-login locally
+        const { error: sessionError } = await supabase.auth.setSession(data.session);
+        if (sessionError) throw sessionError;
+
         toast({
           title: "Account created!",
           description: "Welcome to Finovia Bank.",
         });
         navigate("/dashboard");
+      } else {
+        // Email confirmation required or no session returned
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link to complete your registration.",
+        });
+        navigate("/auth");
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";

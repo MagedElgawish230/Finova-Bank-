@@ -28,17 +28,23 @@ const Auth = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      // Defense in Depth: Route login request through Backend WAF first
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (error) {
-        if (error.message === "Invalid login credentials") {
-          throw new Error("Invalid email or password. Please try again.");
-        }
-        throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Login failed");
       }
+
+      // If backend auth successful, set the session locally
+      const { error: sessionError } = await supabase.auth.setSession(data.session);
+
+      if (sessionError) throw sessionError;
 
       navigate("/dashboard");
     } catch (error) {
@@ -54,6 +60,7 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-background">
